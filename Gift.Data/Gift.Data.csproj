@@ -1,0 +1,198 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{CCC883E0-0439-4FAC-A056-C47C06E8CC70}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Gift.Data</RootNamespace>
+    <AssemblyName>Gift.Data</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.EntityFramework">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.1\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity">
+      <HintPath>..\packages\Unity.4.0.1\lib\net45\Microsoft.Practices.Unity.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity.Mvc">
+      <HintPath>..\packages\Unity.Mvc.4.0.1\lib\net45\Microsoft.Practices.Unity.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Annotations, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ComponentModel.Annotations.4.3.0\lib\net461\System.ComponentModel.Annotations.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web.Mvc">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WebActivatorEx, Version=2.0.0.0, Culture=neutral, PublicKeyToken=7b26dc2a43f6a0d4, processorArchitecture=MSIL">
+      <HintPath>..\packages\WebActivatorEx.2.2.0\lib\net40\WebActivatorEx.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\UnityConfig.cs" />
+    <Compile Include="App_Start\UnityMvcActivator.cs" />
+    <Compile Include="Class1.cs" />
+    <Compile Include="Entities\Friend.cs" />
+    <Compile Include="Entities\GiftItemComment.cs" />
+    <Compile Include="Entities\EventComment.cs" />
+    <Compile Include="Entities\EventType.cs" />
+    <Compile Include="Entities\GiftAutoComplete.cs" />
+    <Compile Include="Entities\GiftItem.cs" />
+    <Compile Include="Entities\Event.cs" />
+    <Compile Include="Entities\City.cs" />
+    <Compile Include="Entities\Country.cs" />
+    <Compile Include="Entities\Culture.cs" />
+    <Compile Include="Entities\District.cs" />
+    <Compile Include="Entities\ModulePermissions\Module.cs" />
+    <Compile Include="Entities\ModulePermissions\ModulePermission.cs" />
+    <Compile Include="Entities\SupplementaryModels\CustomRoute.cs" />
+    <Compile Include="Entities\SupplementaryModels\TracingDateModel.cs" />
+    <Compile Include="Entities\SupplementaryModels\TracingFieldsModel.cs" />
+    <Compile Include="Entities\UserEvent.cs" />
+    <Compile Include="Mappings\UserEventMap.cs" />
+    <Compile Include="Mappings\GiftAutoCompleteMap.cs" />
+    <Compile Include="Mappings\EventTypeMap.cs" />
+    <Compile Include="Mappings\EventCommentMap.cs" />
+    <Compile Include="Mappings\GiftItemCommentMap.cs" />
+    <Compile Include="Mappings\FriendMap.cs" />
+    <Compile Include="Mappings\GiftItemMap.cs" />
+    <Compile Include="Mappings\EventMap.cs" />
+    <Compile Include="Mappings\CityMap.cs" />
+    <Compile Include="Mappings\CountryMap.cs" />
+    <Compile Include="Mappings\CultureMap.cs" />
+    <Compile Include="Mappings\CustomRouteMap.cs" />
+    <Compile Include="Mappings\DistrictMap.cs" />
+    <Compile Include="Mappings\ModulePermission\ModuleMap.cs" />
+    <Compile Include="Mappings\ModulePermission\ModulePermissionMap.cs" />
+    <Compile Include="Migrations\201703281736229_Init.cs" />
+    <Compile Include="Migrations\201703281736229_Init.Designer.cs">
+      <DependentUpon>201703281736229_Init.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201703281803481_Init2.cs" />
+    <Compile Include="Migrations\201703281803481_Init2.Designer.cs">
+      <DependentUpon>201703281803481_Init2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704041826095_CreateTables.cs" />
+    <Compile Include="Migrations\201704041826095_CreateTables.Designer.cs">
+      <DependentUpon>201704041826095_CreateTables.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704052012443_UserUtils.cs" />
+    <Compile Include="Migrations\201704052012443_UserUtils.Designer.cs">
+      <DependentUpon>201704052012443_UserUtils.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704062032096_UserEventUtils.cs" />
+    <Compile Include="Migrations\201704062032096_UserEventUtils.Designer.cs">
+      <DependentUpon>201704062032096_UserEventUtils.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704091648029_PermissionStatus.cs" />
+    <Compile Include="Migrations\201704091648029_PermissionStatus.Designer.cs">
+      <DependentUpon>201704091648029_PermissionStatus.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704111912167_IUserInterface.cs" />
+    <Compile Include="Migrations\201704111912167_IUserInterface.Designer.cs">
+      <DependentUpon>201704111912167_IUserInterface.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704152205467_DbUtils.cs" />
+    <Compile Include="Migrations\201704152205467_DbUtils.Designer.cs">
+      <DependentUpon>201704152205467_DbUtils.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\ActionTypes.cs" />
+    <Compile Include="Models\ApplicationDbContext.cs" />
+    <Compile Include="Models\EventListType.cs" />
+    <Compile Include="Models\IUserId.cs" />
+    <Compile Include="Models\PermissionStatus.cs" />
+    <Compile Include="Models\IBaseEntityId.cs" />
+    <Compile Include="Models\ICulturedCollection.cs" />
+    <Compile Include="Models\ICulturedEntity.cs" />
+    <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\IDependency.cs" />
+    <Compile Include="Models\IEntity.cs" />
+    <Compile Include="Models\IHasStatus.cs" />
+    <Compile Include="Models\FriendshipStatus.cs" />
+    <Compile Include="Models\Permissions.cs" />
+    <Compile Include="Models\PredefinedPage.cs" />
+    <Compile Include="Models\Status.cs" />
+    <Compile Include="Models\UserTypes.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201703281736229_Init.resx">
+      <DependentUpon>201703281736229_Init.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703281803481_Init2.resx">
+      <DependentUpon>201703281803481_Init2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704041826095_CreateTables.resx">
+      <DependentUpon>201704041826095_CreateTables.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704052012443_UserUtils.resx">
+      <DependentUpon>201704052012443_UserUtils.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704062032096_UserEventUtils.resx">
+      <DependentUpon>201704062032096_UserEventUtils.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704091648029_PermissionStatus.resx">
+      <DependentUpon>201704091648029_PermissionStatus.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704111912167_IUserInterface.resx">
+      <DependentUpon>201704111912167_IUserInterface.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704152205467_DbUtils.resx">
+      <DependentUpon>201704152205467_DbUtils.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
