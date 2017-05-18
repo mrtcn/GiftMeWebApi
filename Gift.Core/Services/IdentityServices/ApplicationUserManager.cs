@@ -24,31 +24,31 @@ namespace Gift.Core.Services.IdentityServices
             manager.UserValidator = new UserValidator<ApplicationUser, int>(manager)
             {
                 AllowOnlyAlphanumericUserNames = false,
-                RequireUniqueEmail = true
+                RequireUniqueEmail = false,
             };
             // Configure validation logic for passwords 
             manager.PasswordValidator = new PasswordValidator
             {
                 RequiredLength = 6,
-                RequireNonLetterOrDigit = true,
-                RequireDigit = true,
-                RequireLowercase = true,
-                RequireUppercase = true,
+                RequireNonLetterOrDigit = false,
+                RequireDigit = false,
+                RequireLowercase = false,
+                RequireUppercase = false,
             };
             // Register two factor authentication providers. This application uses Phone 
             // and Emails as a step of receiving a code for verifying the user 
             // You can write your own provider and plug in here. 
-            manager.RegisterTwoFactorProvider("PhoneCode",
-                new PhoneNumberTokenProvider<ApplicationUser, int>
-                {
-                    MessageFormat = "Your security code is: {0}"
-                });
-            manager.RegisterTwoFactorProvider("EmailCode",
-                new EmailTokenProvider<ApplicationUser, int>
-                {
-                    Subject = "Security Code",
-                    BodyFormat = "Your security code is: {0}"
-                });
+            //manager.RegisterTwoFactorProvider("PhoneCode",
+            //    new PhoneNumberTokenProvider<ApplicationUser, int>
+            //    {
+            //        MessageFormat = "Your security code is: {0}"
+            //    });
+            //manager.RegisterTwoFactorProvider("EmailCode",
+            //    new EmailTokenProvider<ApplicationUser, int>
+            //    {
+            //        Subject = "Security Code",
+            //        BodyFormat = "Your security code is: {0}"
+            //    });
             //manager.EmailService = new EmailService();
             //manager.SmsService = new SmsService();
             var dataProtectionProvider = options.DataProtectionProvider;

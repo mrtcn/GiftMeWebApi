@@ -2,6 +2,7 @@
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
 using AutoMapper;
 using Kendo.Mvc.Extensions;
@@ -15,6 +16,7 @@ using Gift.Web.Areas.Dashboard.Controllers.BaseControllers;
 using Gift.Web.Areas.Dashboard.Models;
 using Gift.Web.Areas.Dashboard.Utilities.CustomAttributes;
 using Gift.Web.Areas.Dashboard.ViewModel;
+using Microsoft.AspNet.Identity.Owin;
 
 namespace Gift.Web.Areas.Dashboard.Controllers.AccountControllers {
     [DashboardController(DashboardControllerType.Register, DashboardControllerType.DashboardManagement, 1, "fa fa-link")]
@@ -26,7 +28,7 @@ namespace Gift.Web.Areas.Dashboard.Controllers.AccountControllers {
         public RegisterController(ApplicationUserManager applicationUserManager
             , ApplicationRoleManager applicationRoleManager
             , ApplicationUserRoleManager applicationUserRoleManager) {
-            _applicationUserManager = applicationUserManager;
+            _applicationUserManager = HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>() ?? applicationUserManager;
             _applicationRoleManager = applicationRoleManager;
             _applicationUserRoleManager = applicationUserRoleManager;
         }
