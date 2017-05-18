@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 using System.Web.Mvc;
 using Gift.Core.Model;
 using Gift.Core.Model.DashboardModule;
@@ -10,6 +11,7 @@ using Gift.Data.Models;
 using Gift.Web.Areas.Dashboard.Models;
 using Gift.Web.Areas.Dashboard.Utilities.CustomAttributes;
 using Gift.Web.Areas.Dashboard.ViewModel.BaseModels;
+using Microsoft.AspNet.Identity.Owin;
 using Newtonsoft.Json;
 
 namespace Gift.Web.Areas.Dashboard.Controllers.BaseControllers {
@@ -23,7 +25,7 @@ namespace Gift.Web.Areas.Dashboard.Controllers.BaseControllers {
             , IModuleService moduleService, ApplicationUserManager applicationUserManager) {
             _modulePermissionService = modulePermissionService;
             _moduleService = moduleService;
-            _applicationUserManager = applicationUserManager;
+            _applicationUserManager = HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>() ?? applicationUserManager;
         }
 
         // GET: Dashboard/UserModulePermission

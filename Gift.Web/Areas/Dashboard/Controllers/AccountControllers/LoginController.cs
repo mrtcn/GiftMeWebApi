@@ -10,13 +10,8 @@ using Gift.Web.Areas.Dashboard.ViewModel;
 namespace Gift.Web.Areas.Dashboard.Controllers.AccountControllers {
     [AllowAnonymous]
     public class LoginController : BaseController {
-        private ApplicationUserManager _applicationUserManager;
+        private readonly ApplicationUserManager _applicationUserManager;
         private ApplicationSignInManager _applicationSignInManager;
-
-        public ApplicationUserManager UserManager {
-            get { return _applicationUserManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>(); }
-            private set { _applicationUserManager = value; }
-        }
 
         public ApplicationSignInManager SignInManager {
             get { return _applicationSignInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>(); }
@@ -27,7 +22,7 @@ namespace Gift.Web.Areas.Dashboard.Controllers.AccountControllers {
         }
 
         public LoginController(ApplicationUserManager applicationUserManager, ApplicationSignInManager applicationSignInManager) {
-            _applicationUserManager = applicationUserManager;
+            _applicationUserManager = HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>() ?? applicationUserManager;
             _applicationSignInManager = applicationSignInManager;
         }
 
@@ -37,7 +32,7 @@ namespace Gift.Web.Areas.Dashboard.Controllers.AccountControllers {
         }
 
         public async Task<ActionResult> Login(LoginViewModel model, string returnUrl) {
-            var user = await UserManager.FindByUsernameOrEmail(model.UsernameOrEmail, model.Password);
+            var user = await _applicationUserManager.FindByUsernameOrEmail(model.UsernameOrEmail, model.Password);
             if (user == null) {
                 ModelState.AddModelError("UsernameOrEmail", "Kullanıcı Adı veya Şifre Hatalı");
                 return RedirectToAction("Index", "Login", new { Area = "Dashboard" });

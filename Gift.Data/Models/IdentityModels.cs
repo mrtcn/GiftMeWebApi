@@ -2,6 +2,7 @@
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Gift.Data.Entities;
+using Gift.Data.Models.VariousTypes;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 
@@ -42,11 +43,15 @@ namespace Gift.Data.Models
             Email = user.Email;
             PhoneNumber = user.PhoneNumber;
             UserName = user.UserName;
+            Gender = user.Gender;
+            FullName = user.FullName;
             UserEvents = new HashSet<UserEvent>();
         }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string ImagePath { get; set; }
+        public GenderType Gender { get; set; }
+        public string FullName { get; set; }
         public virtual ICollection<Friend> Friends { get; set; }
         public virtual ICollection<UserEvent> UserEvents { get; set; }
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser, int> manager, string defaultAuthenticationType)
