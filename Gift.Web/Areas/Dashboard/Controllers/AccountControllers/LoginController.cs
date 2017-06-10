@@ -22,7 +22,7 @@ namespace Gift.Web.Areas.Dashboard.Controllers.AccountControllers {
         }
 
         public LoginController(ApplicationUserManager applicationUserManager, ApplicationSignInManager applicationSignInManager) {
-            _applicationUserManager = HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>() ?? applicationUserManager;
+            _applicationUserManager = HttpContext?.GetOwinContext()?.GetUserManager<ApplicationUserManager>() ?? applicationUserManager;
             _applicationSignInManager = applicationSignInManager;
         }
 

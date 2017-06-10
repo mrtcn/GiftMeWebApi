@@ -8,14 +8,8 @@ using Microsoft.Owin.Security.OAuth;
 using Gift.Api.Providers;
 using Gift.Core.Services.IdentityServices;
 using Gift.Data.Models;
-using Microsoft.Owin.Security;
-using Microsoft.Owin.Security.DataHandler;
-using Microsoft.Owin.Security.DataHandler.Encoder;
-using Microsoft.Owin.Security.DataHandler.Serializer;
-using Microsoft.Owin.Security.DataProtection;
 using Microsoft.Owin.Security.Facebook;
 using Microsoft.Owin.Security.Google;
-using Microsoft.Owin.Security.Infrastructure;
 using Owin;
 
 namespace Gift.Api
@@ -24,7 +18,7 @@ namespace Gift.Api
         public static OAuthAuthorizationServerOptions OAuthOptions { get; private set; }
 
         public static string PublicClientId { get; private set; }
-        public const string ExternalCookieAuthenticationType = DefaultAuthenticationTypes.ExternalCookie;
+        public const string ExternalCookieAuthenticationType = DefaultAuthenticationTypes.ExternalBearer;
         public const string ExternalOAuthAuthenticationType = "ExternalToken";
 
         public static OAuthBearerAuthenticationOptions OAuthBearerOptions { get; private set; }
@@ -32,7 +26,7 @@ namespace Gift.Api
         public static FacebookAuthenticationOptions FacebookAuthOptions { get; private set; }
 
         public void ConfigureOAuth(IAppBuilder app) {
-            
+            app.UseCors(Microsoft.Owin.Cors.CorsOptions.AllowAll);
 
             // Configure the db context and user manager to use a single instance per request
             app.CreatePerOwinContext(ApplicationDbContext.Create);
@@ -58,7 +52,7 @@ namespace Gift.Api
                 //Provider = new SimpleAuthorizationServerProvider(),
                 //RefreshTokenProvider = new SimpleRefreshTokenProvider()
                 // In production mode set AllowInsecureHttp = false
-                //AllowInsecureHttp = true,
+                AllowInsecureHttp = true,
                 //AuthenticationType = ExternalOAuthAuthenticationType
             };
 

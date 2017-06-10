@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Web.Http;
+using System.Web.Http.Cors;
 using AutoMapper;
 using Microsoft.Owin;
 using Microsoft.Owin.Cors;
@@ -28,7 +29,9 @@ namespace Gift.Api
 
             ConfigureOAuth(app);
 
+            config.EnableCors(new EnableCorsAttribute("*", "*", "GET, POST, OPTIONS, PUT, DELETE"));
             WebApiConfig.Register(config);
+           
             app.UseCors(CorsOptions.AllowAll);
             
             app.UseWebApi(config);

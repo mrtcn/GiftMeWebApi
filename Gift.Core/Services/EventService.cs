@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Data.Entity;
 using AutoMapper;
 using Gift.Core.BaseServices;
 using Gift.Core.EntityParams;
@@ -70,76 +71,136 @@ namespace Gift.Core.Services
             switch (eventListType)
             {
                 case EventListType.OwnEvents:
-                    return OwnEventsList(userId);
+                    return UserEventList(userId);
                 case EventListType.PublicEvents:
-                    return PublicEventsList(userId);
+                    return PublicEventList();
                 case EventListType.FriendsEvents:
-                    return FriendsEventsList(userId);
+                    return FriendsEventList(userId);
                 default:
                     return null;
             }
         }
 
-        private List<EventModel> OwnEventsList(int userId)
+        private List<EventModel> UserEventList(int userId)
         {
-            return Entities
+            return Entities.Include(x => x.UserEvents).Include(x => x.UserEvents.Select(y => y.User)).Include(x => x.GiftItems)
                 .Where(x => x.UserId == userId && x.Status == Status.Active)
                 .Select(x => new EventModel
                 {
+                    EventOwner = new AddedEventUser
+                    {                        
+                        UserId = x.User.Id,
+                        FullName = x.User.FullName,
+                        UserImagePath = "http://192.168.0.32:54635/areas/dashboard" + x.User.ImagePath
+                    },
                     Users =
-                        x.UserEvents.Where(y => y.User.Id == userId)
-                            .Select(z => new AddedEventUser {UserId = z.User.Id})
+                        x.UserEvents.Where(y => y.EventId == x.Id && y.Status == Status.Active)
+                            .Select(z => new AddedEventUser
+                            {
+                                UserId = z.User.Id,
+                                FullName = z.User.FullName,
+                                UserImagePath = "http://192.168.0.32:54635/areas/dashboard" + z.User.ImagePath
+                            })
                             .ToList(),
                     EventDate = x.EventDate,
                     EventName = x.EventName,
+                    EventImagePath = "http://192.168.0.32:54635/areas/dashboard" + x.EventImagePath,
                     UserId = userId,
                     EventTypeId = x.EventTypeId,
                     GiftItemList = x.GiftItems
-                        .Select(y => new GiftItemModel(y)).ToList(),
+                        .Select(y => new GiftItemModel
+                        {
+                            Id = y.Id,
+                            EventId = y.EventId,
+                            GiftItemName = y.GiftItemName,
+                            GiftImagePath = "http://192.168.0.32:54635/areas/dashboard" + y.GiftImagePath,
+                            IsBought = y.IsBought,
+                            UserId = y.UserId
+                        }).ToList(),
                     Id = x.Id,
                     Permission = x.Permission
                 }).ToList();
         }
 
-        private List<EventModel> PublicEventsList(int userId)
+        private List<EventModel> PublicEventList()
         {
-            return Entities.Take(100)
+            return Entities.Include(x => x.UserEvents).Include(x => x.UserEvents.Select(y => y.User)).Include(x => x.GiftItems).Take(100)
                 .Where(x => x.Permission == PermissionStatus.Everyone && x.Status == Status.Active)
                 .Select(x => new EventModel
                 {
+                    EventOwner = new AddedEventUser
+                    {
+                        UserId = x.User.Id,
+                        FullName = x.User.FullName,
+                        UserImagePath = "http://192.168.0.32:54635/areas/dashboard" + x.User.ImagePath
+                    },
                     Users =
-                        x.UserEvents.Where(y => y.User.Id == x.UserId)
-                            .Select(z => new AddedEventUser { UserId = z.User.Id })
+                        x.UserEvents.Where(y => y.EventId == x.Id && y.Status == Status.Active)
+                            .Select(z => new AddedEventUser
+                            {
+                                UserId = z.User.Id,
+                                FullName = z.User.FullName,
+                                UserImagePath = "http://192.168.0.32:54635/areas/dashboard" + z.User.ImagePath
+                            })
                             .ToList(),
                     EventDate = x.EventDate,
                     EventName = x.EventName,
+                    EventImagePath = "http://192.168.0.32:54635/areas/dashboard" + x.EventImagePath,
                     UserId = x.UserId,
                     EventTypeId = x.EventTypeId,
                     GiftItemList = x.GiftItems
-                        .Select(y => new GiftItemModel(y)).ToList(),
+                        .Select(y => new GiftItemModel
+                        {
+                            Id = y.Id,
+                            EventId = y.EventId,
+                            GiftItemName = y.GiftItemName,
+                            GiftImagePath = "http://192.168.0.32:54635/areas/dashboard" + y.GiftImagePath,
+                            IsBought = y.IsBought,
+                            UserId = y.UserId
+                        }).ToList(),
                     Id = x.Id,
                     Permission = x.Permission
                 }).OrderByDescending(x => x.EventDate).ToList();
         }
 
-        private List<EventModel> FriendsEventsList(int userId)
+        private List<EventModel> FriendsEventList(int userId)
         {
             var friendIds = _friendService.GetUserFriendIds(userId);
 
-            return Entities.Take(100)
+            return Entities.Include(x => x.UserEvents).Include(x => x.UserEvents.Select(y => y.User)).Include(x => x.GiftItems).Take(100)
                 .Where(x => x.Status == Status.Active && friendIds.Contains(x.UserId))
                 .Select(x => new EventModel
                 {
+                    EventOwner = new AddedEventUser
+                    {
+                        UserId = x.User.Id,
+                        FullName = x.User.FullName,
+                        UserImagePath = "http://192.168.0.32:54635/areas/dashboard" + x.User.ImagePath
+                    },
                     Users =
-                        x.UserEvents.Where(y => y.User.Id == x.UserId)
-                            .Select(z => new AddedEventUser { UserId = z.User.Id })
+                        x.UserEvents.Where(y => y.EventId == x.Id && y.Status == Status.Active)
+                            .Select(z => new AddedEventUser
+                            {
+                                UserId = z.User.Id,
+                                FullName = z.User.FullName,
+                                UserImagePath = "http://192.168.0.32:54635/areas/dashboard" + z.User.ImagePath
+                            })
                             .ToList(),
                     EventDate = x.EventDate,
                     EventName = x.EventName,
+                    EventImagePath = "http://192.168.0.32:54635/areas/dashboard" + x.EventImagePath,
                     UserId = x.UserId,
                     EventTypeId = x.EventTypeId,
                     GiftItemList = x.GiftItems
-                        .Select(y => new GiftItemModel(y)).ToList(),
+                        .Select(y => new GiftItemModel
+                        {
+                            Id = y.Id,
+                            EventId = y.EventId,
+                            GiftItemName = y.GiftItemName,
+                            GiftImagePath = "http://192.168.0.32:54635/areas/dashboard" + y.GiftImagePath,
+                            IsBought = y.IsBought,
+                            UserId = y.UserId
+                        }).ToList(),
                     Id = x.Id,
                     Permission = x.Permission
                 }).OrderByDescending(x => x.EventDate).ToList();

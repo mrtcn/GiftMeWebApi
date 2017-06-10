@@ -117,45 +117,13 @@
     <Compile Include="Mappings\DistrictMap.cs" />
     <Compile Include="Mappings\ModulePermission\ModuleMap.cs" />
     <Compile Include="Mappings\ModulePermission\ModulePermissionMap.cs" />
-    <Compile Include="Migrations\201703281736229_Init.cs" />
-    <Compile Include="Migrations\201703281736229_Init.Designer.cs">
-      <DependentUpon>201703281736229_Init.cs</DependentUpon>
+    <Compile Include="Migrations\201705292044425_EventGiftItemImagePaths.cs" />
+    <Compile Include="Migrations\201705292044425_EventGiftItemImagePaths.Designer.cs">
+      <DependentUpon>201705292044425_EventGiftItemImagePaths.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201703281803481_Init2.cs" />
-    <Compile Include="Migrations\201703281803481_Init2.Designer.cs">
-      <DependentUpon>201703281803481_Init2.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201704041826095_CreateTables.cs" />
-    <Compile Include="Migrations\201704041826095_CreateTables.Designer.cs">
-      <DependentUpon>201704041826095_CreateTables.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201704052012443_UserUtils.cs" />
-    <Compile Include="Migrations\201704052012443_UserUtils.Designer.cs">
-      <DependentUpon>201704052012443_UserUtils.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201704062032096_UserEventUtils.cs" />
-    <Compile Include="Migrations\201704062032096_UserEventUtils.Designer.cs">
-      <DependentUpon>201704062032096_UserEventUtils.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201704091648029_PermissionStatus.cs" />
-    <Compile Include="Migrations\201704091648029_PermissionStatus.Designer.cs">
-      <DependentUpon>201704091648029_PermissionStatus.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201704111912167_IUserInterface.cs" />
-    <Compile Include="Migrations\201704111912167_IUserInterface.Designer.cs">
-      <DependentUpon>201704111912167_IUserInterface.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201704152205467_DbUtils.cs" />
-    <Compile Include="Migrations\201704152205467_DbUtils.Designer.cs">
-      <DependentUpon>201704152205467_DbUtils.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201705081844041_ApplicationUserExtraFields.cs" />
-    <Compile Include="Migrations\201705081844041_ApplicationUserExtraFields.Designer.cs">
-      <DependentUpon>201705081844041_ApplicationUserExtraFields.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201705101723089_GenderTypeUtils.cs" />
-    <Compile Include="Migrations\201705101723089_GenderTypeUtils.Designer.cs">
-      <DependentUpon>201705101723089_GenderTypeUtils.cs</DependentUpon>
+    <Compile Include="Migrations\201706012041146_EventToUserFk3.cs" />
+    <Compile Include="Migrations\201706012041146_EventToUserFk3.Designer.cs">
+      <DependentUpon>201706012041146_EventToUserFk3.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ActionTypes.cs" />
@@ -183,35 +151,11 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201703281736229_Init.resx">
-      <DependentUpon>201703281736229_Init.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201705292044425_EventGiftItemImagePaths.resx">
+      <DependentUpon>201705292044425_EventGiftItemImagePaths.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201703281803481_Init2.resx">
-      <DependentUpon>201703281803481_Init2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201704041826095_CreateTables.resx">
-      <DependentUpon>201704041826095_CreateTables.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201704052012443_UserUtils.resx">
-      <DependentUpon>201704052012443_UserUtils.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201704062032096_UserEventUtils.resx">
-      <DependentUpon>201704062032096_UserEventUtils.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201704091648029_PermissionStatus.resx">
-      <DependentUpon>201704091648029_PermissionStatus.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201704111912167_IUserInterface.resx">
-      <DependentUpon>201704111912167_IUserInterface.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201704152205467_DbUtils.resx">
-      <DependentUpon>201704152205467_DbUtils.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201705081844041_ApplicationUserExtraFields.resx">
-      <DependentUpon>201705081844041_ApplicationUserExtraFields.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201705101723089_GenderTypeUtils.resx">
-      <DependentUpon>201705101723089_GenderTypeUtils.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201706012041146_EventToUserFk3.resx">
+      <DependentUpon>201706012041146_EventToUserFk3.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

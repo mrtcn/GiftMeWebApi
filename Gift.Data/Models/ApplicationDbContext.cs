@@ -28,6 +28,10 @@ namespace Gift.Data.Models {
             modelBuilder.Entity<ApplicationUser>().Property(x => x.FirstName).HasMaxLength(255).IsRequired();
             modelBuilder.Entity<ApplicationUser>().Property(x => x.LastName).HasMaxLength(255).IsRequired();
             modelBuilder.Entity<ApplicationUser>()
+                .HasMany(x => x.UserEvents)
+                .WithRequired(x => x.User)
+                .HasForeignKey(x => x.UserId);
+            modelBuilder.Entity<ApplicationUser>()
                 .HasMany(x => x.Friends)
                 .WithOptional(x => x.User)
                 .HasForeignKey(x => x.UserId);

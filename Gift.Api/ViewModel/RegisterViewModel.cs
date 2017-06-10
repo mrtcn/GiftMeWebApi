@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Web;
 using Gift.Data.Models;
 using Gift.Data.Models.VariousTypes;
 
@@ -58,7 +59,7 @@ namespace Gift.Api.ViewModel {
         [Required]
         [Display(Name = "LastName")]
         public string LastName { get; set; }
-
+        
         public string ImagePath { get; set; }
     }
 

@@ -5,6 +5,7 @@ using Gift.Data.Models;
 namespace Gift.Data.Entities {
     public interface IGiftItem : IEntity, IUserId, IHasStatus, ITracingFieldsModel {
         string GiftItemName { get; set; }
+        string GiftImagePath { get; set; }
         int? EventId { get; set; }
         bool IsBought { get; set; }
     }
@@ -13,6 +14,7 @@ namespace Gift.Data.Entities {
     {
         public int Id { get; set; }
         public string GiftItemName { get; set; }
+        public string GiftImagePath { get; set; }
         public int? EventId { get; set; }
         public int UserId { get; set; }
         public bool IsBought { get; set; }

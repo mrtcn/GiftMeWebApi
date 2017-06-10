@@ -9,6 +9,7 @@ namespace Gift.Api.ViewModel
     {
         public int Id { get; set; }
         public string EventName { get; set; }
+        public string EventImagePath { get; set; }
         public int EventTypeId { get; set; }
         public int EventOwnerId { get; set; }
         public DateTime? EventDate { get; set; }

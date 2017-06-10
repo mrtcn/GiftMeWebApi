@@ -1,5 +1,7 @@
 ﻿using System.Web.Mvc;
 using System.Web.Optimization;
+using Gift.Core.Mvc;
+using Gift.Framework.Mvc.Route;
 
 namespace Gift.Web.Areas.Dashboard
 {
@@ -17,7 +19,6 @@ namespace Gift.Web.Areas.Dashboard
 
         public override void RegisterArea(AreaRegistrationContext context)
         {
-
             context.MapRoute("ChangeCulture",
                 "Dashboard/{controller}/{action}/{cultureId}/{actionName}/{controllerName}",
                 //"Dashboard/{controller}/{action}/{cultureId}",

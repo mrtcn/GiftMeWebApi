@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -10,6 +12,7 @@ using System.Web.Http;
 using System.Web.Http.Cors;
 using System.Web.Mvc;
 using Gift.Api.Results;
+using Gift.Api.Utilities.Helpers;
 using Gift.Api.ViewModel;
 using Gift.Core.Services;
 using Gift.Core.Services.IdentityServices;
@@ -45,7 +48,7 @@ namespace Gift.Api.Controllers.Account
         public ISecureDataFormat<AuthenticationTicket> AccessTokenFormat { get; private set; }
 
         // GET api/Account/UserInfo
-        [HostAuthentication(DefaultAuthenticationTypes.ExternalCookie)]
+        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [System.Web.Http.Route("UserInfo")]
         public IHttpActionResult GetUserInfo()
         {
@@ -58,7 +61,7 @@ namespace Gift.Api.Controllers.Account
         }
 
         // GET api/Account/UserInfo
-        [HostAuthentication(DefaultAuthenticationTypes.ExternalCookie)]
+        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [System.Web.Http.Route("ExternalUserInfo"), System.Web.Http.HttpPost]
         public IHttpActionResult GetExternalUserInfo(ExternalUserBindingModel model)
         {
@@ -89,8 +92,8 @@ namespace Gift.Api.Controllers.Account
         [System.Web.Http.Route("Logout")]
         public IHttpActionResult Logout()
         {
-            Authentication.SignOut(CookieAuthenticationDefaults.AuthenticationType);
-            return Ok();
+            Authentication.SignOut(DefaultAuthenticationTypes.ExternalBearer);
+            return Ok(true);
         }
 
         // GET api/Account/ManageInfo?returnUrl=%2F&generateState=true
@@ -225,7 +228,7 @@ namespace Gift.Api.Controllers.Account
                 return BadRequest(ModelState);
             }
 
-            Authentication.SignOut(DefaultAuthenticationTypes.ExternalCookie);
+            Authentication.SignOut(DefaultAuthenticationTypes.ExternalBearer);
 
             AuthenticationTicket ticket = AccessTokenFormat.Unprotect(model.ExternalAccessToken);
 
@@ -285,7 +288,7 @@ namespace Gift.Api.Controllers.Account
 
         // GET api/Account/ExternalLogin
         [System.Web.Http.OverrideAuthentication]
-        [HostAuthentication(DefaultAuthenticationTypes.ExternalCookie)]
+        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [System.Web.Http.AllowAnonymous]
         [System.Web.Http.Route("ExternalLogin", Name = "ExternalLogin")]
         public async Task<IHttpActionResult> GetExternalLogin(string provider, string error = null)
@@ -318,7 +321,7 @@ namespace Gift.Api.Controllers.Account
 
             if (externalLogin.LoginProvider != provider)
             {
-                Authentication.SignOut(DefaultAuthenticationTypes.ExternalCookie);
+                Authentication.SignOut(DefaultAuthenticationTypes.ExternalBearer);
                 return new ChallengeResult(provider, this);
             }
 
@@ -380,8 +383,36 @@ namespace Gift.Api.Controllers.Account
         // POST api/Account/Register
         [System.Web.Http.AllowAnonymous]
         [System.Web.Http.Route("Register")]
-        public async Task<IHttpActionResult> Register(RegisterViewModel model)
+        public async Task<IHttpActionResult> Register()
         {
+            if (!Request.Content.IsMimeMultipartContent())
+            {
+                throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
+            }
+            var virtualPath = "~/App_Data/Temp/FileUploads/Register";
+            var rootPath = HttpContext.Current.Server.MapPath(virtualPath);
+
+            Directory.CreateDirectory(rootPath);
+            var provider = new MultipartFormDataStreamProvider(rootPath);
+            var data = await Request.Content.ReadAsMultipartAsync(provider);
+            if (data.FormData["data"] == null)
+            {
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+            }
+
+            var modelJson = data.FormData["data"];
+            var model = JsonConvert.DeserializeObject<RegisterViewModel>(modelJson);
+
+            Uri fileFullPath = null;
+            var replacedAbsoluteUri = Request.RequestUri.AbsoluteUri.Replace(Request.RequestUri.PathAndQuery, string.Empty);
+            
+            //get the files and save to the specified path
+            foreach (var item in data.FileData)
+            {
+                var imageHelper = new ImageHelper(item, virtualPath, replacedAbsoluteUri);
+                fileFullPath = imageHelper.SaveImage();
+            }
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -394,7 +425,8 @@ namespace Gift.Api.Controllers.Account
                 FirstName = model.FirstName,
                 LastName = model.LastName,
                 Gender = model.Gender,
-                FullName = model.FullName
+                FullName = model.FullName,
+                ImagePath = fileFullPath?.AbsoluteUri
             };
 
             IdentityResult result = await _applicationUserManager.CreateAsync(user, model.Password);
@@ -417,7 +449,7 @@ namespace Gift.Api.Controllers.Account
 
         // POST api/Account/RegisterExternal
         [System.Web.Http.OverrideAuthentication]
-        [HostAuthentication(DefaultAuthenticationTypes.ExternalCookie)]
+        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [System.Web.Http.Route("RegisterExternal")]
         public async Task<IHttpActionResult> RegisterExternal(ExternalRegisterViewModel model)
         {
@@ -498,7 +530,7 @@ namespace Gift.Api.Controllers.Account
             //generate access token response
             var accessTokenResponse = GenerateLocalAccessTokenResponse(user.UserName);
 
-            ClaimsIdentity identity = new ClaimsIdentity(DefaultAuthenticationTypes.ExternalCookie);
+            ClaimsIdentity identity = new ClaimsIdentity(DefaultAuthenticationTypes.ExternalBearer);
             identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()));
 
             return Ok(accessTokenResponse);
@@ -796,7 +828,7 @@ namespace Gift.Api.Controllers.Account
             var tokenExpiration = TimeSpan.FromDays(1);
 
             //ClaimsIdentity identity = new ClaimsIdentity(OAuthDefaults.AuthenticationType);
-            ClaimsIdentity identity = new ClaimsIdentity(DefaultAuthenticationTypes.ExternalCookie);
+            ClaimsIdentity identity = new ClaimsIdentity(DefaultAuthenticationTypes.ExternalBearer);
 
             identity.AddClaim(new Claim(ClaimTypes.Name, userName));
             identity.AddClaim(new Claim("role", "user"));            
