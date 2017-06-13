@@ -443,7 +443,6 @@ namespace Gift.Api.Controllers.Account
             await _applicationUserManager.AddClaimAsync(userId, new Claim("popcorn", "100"));
             
             //Generate Access Token Response
-            //var accessTokenResponse = GenerateLocalAccessTokenResponse(model.UserName);
             return Ok(new UserBindingModel(user));
         }
 
@@ -491,12 +490,7 @@ namespace Gift.Api.Controllers.Account
             if (!result.Succeeded)
             {
                 return GetErrorResult(result);
-            }
-
-            //Generate Access Token Response
-            var accessTokenResponse = GenerateLocalAccessTokenResponse(model.UserName);
-
-            //ExternalLoginData externalLogin = ExternalLoginData.FromIdentity(User.Identity as ClaimsIdentity);
+            }           
 
             return Ok(new UserBindingModel(user));
         }
@@ -528,10 +522,9 @@ namespace Gift.Api.Controllers.Account
             }
 
             //generate access token response
-            var accessTokenResponse = GenerateLocalAccessTokenResponse(user.UserName);
+            var accessTokenResponse = GenerateLocalAccessTokenResponse(user.UserName, user.Id);
 
-            ClaimsIdentity identity = new ClaimsIdentity(DefaultAuthenticationTypes.ExternalBearer);
-            identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()));
+            ClaimsIdentity identity = new ClaimsIdentity(OAuthDefaults.AuthenticationType);
 
             return Ok(accessTokenResponse);
 
@@ -822,15 +815,16 @@ namespace Gift.Api.Controllers.Account
             return parsedToken;
         }
 
-        private JObject GenerateLocalAccessTokenResponse(string userName)
+        private JObject GenerateLocalAccessTokenResponse(string userName, int id)
         {
 
-            var tokenExpiration = TimeSpan.FromDays(1);
+            var tokenExpiration = TimeSpan.FromDays(14);
 
-            //ClaimsIdentity identity = new ClaimsIdentity(OAuthDefaults.AuthenticationType);
-            ClaimsIdentity identity = new ClaimsIdentity(DefaultAuthenticationTypes.ExternalBearer);
+            ClaimsIdentity identity = new ClaimsIdentity(OAuthDefaults.AuthenticationType);
+            //ClaimsIdentity identity = new ClaimsIdentity(DefaultAuthenticationTypes.ApplicationCookie);
 
             identity.AddClaim(new Claim(ClaimTypes.Name, userName));
+            identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, id.ToString()));
             identity.AddClaim(new Claim("role", "user"));            
 
             var props = new AuthenticationProperties()

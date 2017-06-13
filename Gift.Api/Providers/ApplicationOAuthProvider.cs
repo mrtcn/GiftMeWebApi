@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
-using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OAuth;
 using Gift.Core.Services.IdentityServices;
 using Gift.Data.Models;
+using Microsoft.Owin.Security.Cookies;
 
 namespace Gift.Api.Providers
 {
@@ -41,7 +41,7 @@ namespace Gift.Api.Providers
             ClaimsIdentity oAuthIdentity = await user.GenerateUserIdentityAsync(userManager,
                OAuthDefaults.AuthenticationType);
             ClaimsIdentity cookiesIdentity = await user.GenerateUserIdentityAsync(userManager,
-                DefaultAuthenticationTypes.ExternalBearer);
+                CookieAuthenticationDefaults.AuthenticationType);
 
             AuthenticationProperties properties = CreateProperties(user.UserName);
             AuthenticationTicket ticket = new AuthenticationTicket(oAuthIdentity, properties);

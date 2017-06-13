@@ -18,7 +18,7 @@ namespace Gift.Api
         public static OAuthAuthorizationServerOptions OAuthOptions { get; private set; }
 
         public static string PublicClientId { get; private set; }
-        public const string ExternalCookieAuthenticationType = DefaultAuthenticationTypes.ExternalBearer;
+        public const string ExternalCookieAuthenticationType = DefaultAuthenticationTypes.ExternalCookie;
         public const string ExternalOAuthAuthenticationType = "ExternalToken";
 
         public static OAuthBearerAuthenticationOptions OAuthBearerOptions { get; private set; }
@@ -57,7 +57,7 @@ namespace Gift.Api
             };
 
             // Enable the application to use bearer tokens to authenticate users
-            //app.UseOAuthBearerTokens(OAuthOptions);
+            app.UseOAuthBearerTokens(OAuthOptions);
             // Token Generation
             app.UseOAuthAuthorizationServer(OAuthOptions);
             app.UseOAuthBearerAuthentication(OAuthBearerOptions);
