@@ -47,11 +47,12 @@ namespace Gift.Api.Controllers
             return Ok(eventList);
         }
 
-        [Route("GetEvent")]
+        [Route("GetEventById")]
         [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer), HttpPost]
-        public IHttpActionResult GetEvent(int eventId)
-        {            
-            return Ok(new EventModel(_eventService.Get(eventId)));
+        public IHttpActionResult GetEventById(EventIdModel eventModel)
+        {
+            var eventDetail = new EventModel(_eventService.Get(eventModel.EventId));
+            return Ok(eventDetail);
         }
 
         [Route("RemoveEvent")]

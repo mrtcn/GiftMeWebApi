@@ -23,4 +23,9 @@ namespace Gift.Api.ViewModel
     {
         public EventListType EventListType { get; set; }
     }
+
+    public class EventIdModel
+    {
+        public int EventId { get; set; }
+    }
 }
