@@ -9,8 +9,8 @@ using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
-using System.Web.Http.Cors;
 using System.Web.Mvc;
+using Gift.Api.Models;
 using Gift.Api.Results;
 using Gift.Api.Utilities.Helpers;
 using Gift.Api.ViewModel;
@@ -20,7 +20,6 @@ using Gift.Data.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
-using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OAuth;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -28,7 +27,7 @@ using Newtonsoft.Json.Linq;
 namespace Gift.Api.Controllers.Account
 {
     [System.Web.Http.RoutePrefix("api/Account"), RequireHttps]
-    public class AccountController : ApiController
+    public class AccountController : BaseController
     {
         private readonly ApplicationUserManager _applicationUserManager;
         private readonly IEventService _eventService;
@@ -53,11 +52,11 @@ namespace Gift.Api.Controllers.Account
         public IHttpActionResult GetUserInfo()
         {
             ApplicationUser user = _applicationUserManager.FindById(User.Identity.GetUserId<int>());
-
             if (user == null)
-                return BadRequest();
+                return ErrorResponse(new ErrorModel(null,Resources.WebApiResource.Error1, 1));
 
-            return Ok(new UserBindingModel(user));
+            //return Ok(new UserBindingModel(user));
+            return SuccessResponse(new SuccessModel(new UserBindingModel(user)));
         }
 
         // GET api/Account/UserInfo

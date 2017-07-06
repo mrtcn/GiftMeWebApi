@@ -19,7 +19,7 @@ namespace Gift.Api.ViewModel
         public List<AddedEventUser> Users { get; set; }
     }
 
-    public class EventListModel
+    public class EventListTypeModel
     {
         public EventListType EventListType { get; set; }
     }

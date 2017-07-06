@@ -12,6 +12,11 @@ namespace Gift.Framework.Extensions {
             return Enum.GetValues(typeof(T)).Cast<Enum>()
                 .Select(x => new SelectListItem { Text = x.GetEnumDescription<DisplayAttribute>().Name, Value = ((int)Enum.Parse(typeof(T), x.ToString())).ToString() });
         }
+
+        public static IEnumerable<string> ToListItem()
+        {
+            return Enum.GetValues(typeof(T)).Cast<Enum>().Select(x => x.GetEnumDescription<DisplayAttribute>().Name);
+        }
     }
 
     public static class EnumExtensions {

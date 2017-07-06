@@ -12,7 +12,8 @@ namespace Gift.Api
             Mapper.Initialize(x => {
                 x.CreateMissingTypeMaps = true;
             });
-
+            config.Filters.Add(new GlobalExceptionFilterAttribute());
+            config.MessageHandlers.Add(new LocalizationMessageHandler());
             var cors = new System.Web.Http.Cors.EnableCorsAttribute("*", "*", "*");
 
             // Web API configuration and services

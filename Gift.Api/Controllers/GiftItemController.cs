@@ -9,27 +9,26 @@ using Gift.Api.ViewModel;
 using Gift.Core.Services;
 using Microsoft.AspNet.Identity;
 using AutoMapper;
-using Gift.Api.Models;
 using Gift.Api.Utilities.Helpers;
 using Gift.Core.EntityParams;
 using Newtonsoft.Json;
 
 namespace Gift.Api.Controllers
 {
-    [RoutePrefix("api/Event"), Authorize]
-    public class EventController : BaseController
+    [RoutePrefix("api/GiftItem"), Authorize]
+    public class GiftItemController : ApiController
     {
-        private readonly IEventService _eventService;
+        private readonly IGiftItemService _giftItemService;
 
-        public EventController(
-            IEventService eventService)
+        public GiftItemController(
+            IGiftItemService giftItemService)
         {
-            _eventService = eventService;
+            _giftItemService = giftItemService;
         }
 
-        [Route("CreateOrUpdateEvent")]
+        [Route("CreateOrUpdateGiftItem")]
         [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer), HttpPost]
-        public async Task<IHttpActionResult> CreateOrUpdateEvent()
+        public async Task<IHttpActionResult> CreateOrUpdateGiftItem()
         {
             if (!Request.Content.IsMimeMultipartContent())
             {
@@ -47,7 +46,7 @@ namespace Gift.Api.Controllers
             }
 
             var modelJson = data.FormData["data"];
-            var model = JsonConvert.DeserializeObject<EventViewModel>(modelJson);
+            var model = JsonConvert.DeserializeObject<GiftItemViewModel>(modelJson);
 
             Uri fileFullPath = null;
             var replacedAbsoluteUri = Request.RequestUri.AbsoluteUri.Replace(Request.RequestUri.PathAndQuery, string.Empty);
@@ -63,47 +62,49 @@ namespace Gift.Api.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var eventParams = new EventParams();            
-            Mapper.Map(model, eventParams);
-            eventParams.EventImagePath = fileFullPath?.AbsolutePath;
-
+            var giftItemParams = new GiftItemParams();            
+            Mapper.Map(model, giftItemParams);
+            giftItemParams.GiftImagePath = fileFullPath?.AbsoluteUri;
             /* Get and Assign UserId */
-            eventParams.UserId = User.Identity.GetUserId<int>();
-            //If it is update, check if it is user's own event or not
-            if (eventParams.Id != 0)
+            giftItemParams.UserId = User.Identity.GetUserId<int>();
+            //If it is update, check if it is user's own giftItem or not
+            if (giftItemParams.Id != 0)
             {
-                var isUsersOwnEvent = _eventService.CheckUserProperty(eventParams);
-                if (!isUsersOwnEvent)
-                    return ErrorResponse(new ErrorModel(null, Resources.WebApiResource.Error1, 1));
+                var isUsersOwnGiftItem = _giftItemService.CheckUserProperty(giftItemParams);
+                if (!isUsersOwnGiftItem)
+                    return BadRequest("Failure");
             }
-
-            _eventService.CreateOrUpdate(eventParams);
-
-            return SuccessResponse(new SuccessModel(eventParams.Id, null, 0));
+            //CreatedBy and UpdatedBy 
+            if (giftItemParams.Id > 0)
+            {
+                
+            }
+            _giftItemService.CreateOrUpdate(giftItemParams);
+                             
+            return Ok(giftItemParams.Id);
         }
 
-        [Route("EventList")]
+        [Route("GiftItemList")]
         [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer), HttpPost]
-        public IHttpActionResult EventList(EventListTypeModel model)
+        public IHttpActionResult GiftItemListByEventId(GiftItemIdModel model)
         {
-            var userId = User.Identity.GetUserId<int>();
-            var eventList = _eventService.EventList(model.EventListType, userId);
-            return SuccessResponse(new SuccessModel(eventList, null, 0));
+            var giftItemList = _giftItemService.GiftItemListByEventId(model.GiftItemId);
+            return Ok(giftItemList);
         }
 
-        [Route("GetEventById")]
+        [Route("GetGiftItemById")]
         [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer), HttpPost]
-        public IHttpActionResult GetEventById(EventIdModel eventModel)
+        public IHttpActionResult GetGiftItemById(GiftItemIdModel giftItemModel)
         {
-            var eventDetail = new EventModel(_eventService.Get(eventModel.EventId));
-            return SuccessResponse(new SuccessModel(eventDetail, null, 0));
+            var giftItemDetail = new GiftItemModel(_giftItemService.Get(giftItemModel.GiftItemId));
+            return Ok(giftItemDetail);
         }
 
-        [Route("RemoveEvent")]
+        [Route("RemoveGiftItem")]
         [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer), HttpPost]
-        public IHttpActionResult RemoveEvent(int eventId)
+        public IHttpActionResult RemoveGiftItem(int giftItemId)
         {
-            return SuccessResponse(new SuccessModel(_eventService.Remove(eventId), null, 0));
+            return Ok(_giftItemService.Remove(giftItemId));
         }
     }
 }

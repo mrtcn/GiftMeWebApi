@@ -12,7 +12,6 @@ namespace Gift.Core.Utilities.Extensions
                     break;
                 case ActionTypes.Update:
                 case ActionTypes.Remove:
-                    //model.CreationDate = DateTime.Now;
                     model.ModificationDate = DateTime.Now;
                     break;
             }
