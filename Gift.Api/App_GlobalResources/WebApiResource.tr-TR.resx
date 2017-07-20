@@ -117,11 +117,59 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ChangePasswordFailed" xml:space="preserve">
+    <value>Şifre değiştirilirken bir hata oluştu.</value>
+  </data>
+  <data name="CreatingItemFailed" xml:space="preserve">
+    <value>Wishlist ürünü oluşturulurken bir hata oluştu.</value>
+  </data>
+  <data name="CreatingWishlistFailed" xml:space="preserve">
+    <value>Wishlist'in oluşturulurken bir hata oluştu.</value>
+  </data>
   <data name="Error1" xml:space="preserve">
     <value>Bir hata oluştu</value>
   </data>
+  <data name="ExternalLoginAlreadyAssociated" xml:space="preserve">
+    <value>Sosyal medya bilgileri başka bir hesap ile ilintilidir.</value>
+  </data>
+  <data name="ExternalLoginFailed" xml:space="preserve">
+    <value>Sosyal medya girişi sırasında bir hata oluştu</value>
+  </data>
+  <data name="ExternalRegisterFailed" xml:space="preserve">
+    <value>Sosyal medya kaydı sırasında bir hata oluştu.</value>
+  </data>
+  <data name="ExternalRegisterInvalid" xml:space="preserve">
+    <value>Sosyal medya kaydı sırasında bir hata oluştu.</value>
+  </data>
+  <data name="LoginAlreadyAssociated" xml:space="preserve">
+    <value>Kullanıcı girişi bilgileri başka bir hesap ile ilintilidir.</value>
+  </data>
+  <data name="LoginFailed" xml:space="preserve">
+    <value>Kullanıcı girişi sırasında bir hata oluştu</value>
+  </data>
+  <data name="ObtainingUserFailed" xml:space="preserve">
+    <value>Sosyal medya hesabi oluşturulurken bir hata oluştu.</value>
+  </data>
+  <data name="ObtainingUserInvalid" xml:space="preserve">
+    <value>Geçersiz sosyal medya bilgisi.</value>
+  </data>
+  <data name="ObtainingUserNotSent" xml:space="preserve">
+    <value>Sosyal medya bilgileri gönderilemedi.</value>
+  </data>
+  <data name="RegisterFailed" xml:space="preserve">
+    <value>Kullanıcı kaydı sırasında bir hata oluştu.</value>
+  </data>
+  <data name="RemoveUserFailed" xml:space="preserve">
+    <value>Kullanıcı silinirken bir hata oluştu. Problem devam ederse lütfen bizimle iletişime geçin.</value>
+  </data>
+  <data name="SavingCommentFailed" xml:space="preserve">
+    <value>Yorum kaydedilirken bir hata oluştu.</value>
+  </data>
   <data name="ServerError1" xml:space="preserve">
     <value>Beklenmedik bir hata oluştu</value>
+  </data>
+  <data name="UnsupportedMediaType" xml:space="preserve">
+    <value>Desteklenmeyen bir dosya yüklediniz.</value>
   </data>
   <data name="Warning1" xml:space="preserve">
     <value>Seni uyarıyorum</value>

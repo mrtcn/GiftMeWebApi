@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Web.Http;
+using Gift.Api.Models;
 using Gift.Api.ViewModel;
 using Gift.Core.EntityParams;
 using Gift.Core.Services;
@@ -8,7 +9,7 @@ using Microsoft.AspNet.Identity;
 namespace Gift.Api.Controllers
 {
     [RoutePrefix("api/Friend"), Authorize]
-    public class FriendController : ApiController
+    public class FriendController : BaseController
     {
         private readonly IFriendService _friendService;
 
@@ -33,7 +34,7 @@ namespace Gift.Api.Controllers
 
             friendParams.Id = friendshipId;
             _friendService.CreateOrUpdate(friendParams);
-            return Ok();
+            return SuccessResponse(new SuccessModel(null));
         }
 
         //It will send or answer friendship request upon FriendshipStatus
@@ -43,8 +44,8 @@ namespace Gift.Api.Controllers
         {
             var userId = User.Identity.GetUserId<int>();
             var friendshipList = _friendService.GetUserFriends(userId, model.FriendshipStatus).Select(x => new FriendshipViewModel(x));
-
-            return Ok(friendshipList);
+            
+            return SuccessResponse(new SuccessModel(friendshipList));
         }
     }
 }

@@ -90,11 +90,11 @@ namespace Gift.Core.Services
                     {
                         UserId = x.User.Id,
                         FullName = x.User.FullName,
-                        UserImagePath = "http://192.168.0.32:54635/areas/dashboard" + x.User.ImagePath
+                        UserImagePath = "http://192.168.0.16:54635" + x.User.ImagePath
                     },
                     EventDate = x.EventDate,
                     EventName = x.EventName,
-                    EventImagePath = "http://192.168.0.32:54635/areas/dashboard" + x.EventImagePath,
+                    EventImagePath = "http://192.168.0.16:54635" + x.EventImagePath,
                     EventTypeId = x.EventTypeId,
                     Id = x.Id
                 }).ToList();
@@ -110,11 +110,11 @@ namespace Gift.Core.Services
                     {
                         UserId = x.User.Id,
                         FullName = x.User.FullName,
-                        UserImagePath = "http://192.168.0.32:54635/areas/dashboard" + x.User.ImagePath
+                        UserImagePath = "http://192.168.0.16:54635" + x.User.ImagePath
                     },
                     EventDate = x.EventDate,
                     EventName = x.EventName,
-                    EventImagePath = "http://192.168.0.32:54635/areas/dashboard" + x.EventImagePath,                   
+                    EventImagePath = "http://192.168.0.16:54635" + x.EventImagePath,                   
                     EventTypeId = x.EventTypeId,                    
                     Id = x.Id
                 }).OrderByDescending(x => x.EventDate).ToList();
@@ -132,11 +132,11 @@ namespace Gift.Core.Services
                     {
                         UserId = x.User.Id,
                         FullName = x.User.FullName,
-                        UserImagePath = "http://192.168.0.32:54635/areas/dashboard" + x.User.ImagePath
+                        UserImagePath = "http://192.168.0.16:54635" + x.User.ImagePath
                     },
                     EventDate = x.EventDate,
                     EventName = x.EventName,
-                    EventImagePath = "http://192.168.0.32:54635/areas/dashboard" + x.EventImagePath,                 
+                    EventImagePath = "http://192.168.0.16:54635" + x.EventImagePath,                 
                     EventTypeId = x.EventTypeId,                    
                     Id = x.Id
                 }).OrderByDescending(x => x.EventDate).ToList();

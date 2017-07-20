@@ -10,7 +10,7 @@ namespace Gift.Api.Results
 {
     public class SuccessHttpActionResult: IHttpActionResult {
         public SuccessModel SuccessModel { get; set; }
-        public HttpRequestMessage RequestMessage { get; set; }
+        public HttpRequestMessage RequestMessage { get; set; }        
         public SuccessHttpActionResult(ApiController controller, SuccessModel successModel)
         {
             SuccessModel = successModel;

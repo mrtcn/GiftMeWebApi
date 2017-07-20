@@ -1,4 +1,5 @@
 ﻿using System.Web.Http;
+using Gift.Api.Models;
 using Gift.Api.ViewModel;
 using Gift.Core.EntityParams;
 using Gift.Core.Services;
@@ -7,7 +8,7 @@ using Microsoft.AspNet.Identity;
 namespace Gift.Api.Controllers
 {
     [RoutePrefix("api/Comment"), Authorize]
-    public class CommentController : ApiController
+    public class CommentController : BaseController
     {
         private readonly IGiftItemCommentService _giftItemCommentService;
         private readonly IEventCommentService _eventCommentService;
@@ -25,7 +26,7 @@ namespace Gift.Api.Controllers
         public IHttpActionResult GiftItemCommentList(GiftItemIdViewModel model)
         {
             var giftItemComments = _giftItemCommentService.GiftItemCommentsByGiftItemId(model.GiftItemId);
-            return Ok(giftItemComments);
+            return SuccessResponse(new SuccessModel(giftItemComments));
         }
 
         [Route("AddOrUpdateGiftItemComment")]
@@ -42,10 +43,10 @@ namespace Gift.Api.Controllers
             var isUsersOwnEvent = _giftItemCommentService.CheckUserProperty(giftItemCommentParams);
 
             if (!isUsersOwnEvent)
-                return BadRequest("Failure");
+                return ErrorResponse(new ErrorModel(null, Resources.WebApiResource.SavingCommentFailed, 1));
 
             var giftItemComment = _giftItemCommentService.CreateOrUpdate(giftItemCommentParams);
-            return Ok(new GiftItemCommentModel(giftItemComment));
+            return SuccessResponse(new SuccessModel(new GiftItemCommentModel(giftItemComment)));
         }
 
         [Route("RemoveGiftItemComment")]
@@ -53,7 +54,7 @@ namespace Gift.Api.Controllers
         public IHttpActionResult RemoveGiftItemComment(CommentIdViewModel model)
         {
             _giftItemCommentService.Remove(model.Id);
-            return Ok();
+            return SuccessResponse(new SuccessModel(null));
         }
 
         [Route("EventCommentList")]
@@ -61,7 +62,7 @@ namespace Gift.Api.Controllers
         public IHttpActionResult EventCommentList(EventIdViewModel model)
         {
             var eventComments = _eventCommentService.GiftItemCommentsByGiftItemId(model.EventId);
-            return Ok(eventComments);
+            return SuccessResponse(new SuccessModel(eventComments));
         }
 
         [Route("AddOrUpdateEventComment")]
@@ -78,10 +79,10 @@ namespace Gift.Api.Controllers
             var isUsersOwnEvent = _eventCommentService.CheckUserProperty(eventCommentParams);
 
             if (!isUsersOwnEvent)
-                return BadRequest("Failure");
+                return ErrorResponse(new ErrorModel(null, Resources.WebApiResource.SavingCommentFailed, 1));
 
             var eventComment = _eventCommentService.CreateOrUpdate(eventCommentParams);
-            return Ok(new EventCommentModel(eventComment));
+            return SuccessResponse(new SuccessModel(new EventCommentModel(eventComment)));
         }
 
         [Route("RemoveEventComment")]
@@ -89,7 +90,7 @@ namespace Gift.Api.Controllers
         public IHttpActionResult RemoveEventComment(CommentIdViewModel model)
         {
             var result = _eventCommentService.Remove(model.Id);
-            return Ok(result);
+            return SuccessResponse(new SuccessModel(result));
         }
     }
 }

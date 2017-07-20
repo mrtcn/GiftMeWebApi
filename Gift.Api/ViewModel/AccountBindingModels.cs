@@ -40,7 +40,7 @@ namespace Gift.Api.ViewModel
     {
         public UserBindingModel(){}
 
-        public UserBindingModel(ApplicationUser user)
+        public UserBindingModel(ApplicationUser user, bool addBaseUrlFlag = true)
         {
             Id = user.Id;
             UserName = user.UserName;
@@ -49,7 +49,7 @@ namespace Gift.Api.ViewModel
             FullName = user.FullName;
             Gender = user.Gender;
             Email = user.Email;
-            ImagePath = user.ImagePath;
+            ImagePath = addBaseUrlFlag?ApiStarter.BaseUrl + user.ImagePath: user.ImagePath;
         }
         public int Id { get; set; }
         public string UserName { get; set; }

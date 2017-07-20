@@ -9,6 +9,7 @@ using Gift.Api.ViewModel;
 using Gift.Core.Services;
 using Microsoft.AspNet.Identity;
 using AutoMapper;
+using Gift.Api.Models;
 using Gift.Api.Utilities.Helpers;
 using Gift.Core.EntityParams;
 using Newtonsoft.Json;
@@ -16,7 +17,7 @@ using Newtonsoft.Json;
 namespace Gift.Api.Controllers
 {
     [RoutePrefix("api/GiftItem"), Authorize]
-    public class GiftItemController : ApiController
+    public class GiftItemController : BaseController
     {
         private readonly IGiftItemService _giftItemService;
 
@@ -32,7 +33,7 @@ namespace Gift.Api.Controllers
         {
             if (!Request.Content.IsMimeMultipartContent())
             {
-                throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
+                return ErrorResponse(new ErrorModel(null, Resources.WebApiResource.UnsupportedMediaType, 1), HttpStatusCode.UnsupportedMediaType);
             }
             var virtualPath = "~/App_Data/Temp/FileUploads/Register";
             var rootPath = HttpContext.Current.Server.MapPath(virtualPath);
@@ -42,7 +43,7 @@ namespace Gift.Api.Controllers
             var data = await Request.Content.ReadAsMultipartAsync(provider);
             if (data.FormData["data"] == null)
             {
-                throw new HttpResponseException(HttpStatusCode.BadRequest);
+                return ErrorResponse(new ErrorModel(null, Resources.WebApiResource.CreatingItemFailed, 1));
             }
 
             var modelJson = data.FormData["data"];
@@ -60,11 +61,11 @@ namespace Gift.Api.Controllers
 
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return ErrorResponse(new ErrorModel(null, Resources.WebApiResource.CreatingItemFailed, 1));
             }
             var giftItemParams = new GiftItemParams();            
             Mapper.Map(model, giftItemParams);
-            giftItemParams.GiftImagePath = fileFullPath?.AbsoluteUri;
+            giftItemParams.GiftImagePath = fileFullPath?.AbsolutePath;
             /* Get and Assign UserId */
             giftItemParams.UserId = User.Identity.GetUserId<int>();
             //If it is update, check if it is user's own giftItem or not
@@ -72,7 +73,7 @@ namespace Gift.Api.Controllers
             {
                 var isUsersOwnGiftItem = _giftItemService.CheckUserProperty(giftItemParams);
                 if (!isUsersOwnGiftItem)
-                    return BadRequest("Failure");
+                    return ErrorResponse(new ErrorModel(null, Resources.WebApiResource.CreatingItemFailed, 1));
             }
             //CreatedBy and UpdatedBy 
             if (giftItemParams.Id > 0)
@@ -81,7 +82,7 @@ namespace Gift.Api.Controllers
             }
             _giftItemService.CreateOrUpdate(giftItemParams);
                              
-            return Ok(giftItemParams.Id);
+             return SuccessResponse(new SuccessModel(giftItemParams.Id));
         }
 
         [Route("GiftItemList")]
@@ -97,14 +98,15 @@ namespace Gift.Api.Controllers
         public IHttpActionResult GetGiftItemById(GiftItemIdModel giftItemModel)
         {
             var giftItemDetail = new GiftItemModel(_giftItemService.Get(giftItemModel.GiftItemId));
-            return Ok(giftItemDetail);
+
+            return SuccessResponse(new SuccessModel(giftItemDetail));
         }
 
         [Route("RemoveGiftItem")]
         [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer), HttpPost]
         public IHttpActionResult RemoveGiftItem(int giftItemId)
-        {
-            return Ok(_giftItemService.Remove(giftItemId));
+        {            
+            return SuccessResponse(new SuccessModel(_giftItemService.Remove(giftItemId)));
         }
     }
 }

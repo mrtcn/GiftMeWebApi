@@ -117,11 +117,62 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ChangePasswordFailed" xml:space="preserve">
+    <value>An error occured during changing password</value>
+  </data>
+  <data name="CreatingItemFailed" xml:space="preserve">
+    <value>An error occured during creating your wishlist item.</value>
+  </data>
+  <data name="CreatingWishlistFailed" xml:space="preserve">
+    <value>An error occured during creating your wishlist.</value>
+  </data>
   <data name="Error1" xml:space="preserve">
     <value>An error occured</value>
   </data>
+  <data name="ExternalLoginAlreadyAssociated" xml:space="preserve">
+    <value>The external login is already associated with an account.</value>
+  </data>
+  <data name="ExternalLoginFailed" xml:space="preserve">
+    <value>External Login failed</value>
+  </data>
+  <data name="ExternalRegisterAlreadyExists" xml:space="preserve">
+    <value>External user is already registered</value>
+  </data>
+  <data name="ExternalRegisterFailed" xml:space="preserve">
+    <value>An error occured during registering user.</value>
+  </data>
+  <data name="ExternalRegisterInvalid" xml:space="preserve">
+    <value>Invalid Provider or External Access Token</value>
+  </data>
+  <data name="LoginAlreadyAssociated" xml:space="preserve">
+    <value>The login is already associated with an account.</value>
+  </data>
+  <data name="LoginFailed" xml:space="preserve">
+    <value>Login failed</value>
+  </data>
+  <data name="ObtainingUserFailed" xml:space="preserve">
+    <value>External user is not registered</value>
+  </data>
+  <data name="ObtainingUserInvalid" xml:space="preserve">
+    <value>Invalid Provider or External Access Token</value>
+  </data>
+  <data name="ObtainingUserNotSent" xml:space="preserve">
+    <value>Provider or external access token is not sent</value>
+  </data>
+  <data name="RegisterFailed" xml:space="preserve">
+    <value>An error occured during registeration.</value>
+  </data>
+  <data name="RemoveUserFailed" xml:space="preserve">
+    <value>An error occured during removing user. If the problem continues, please contact us.</value>
+  </data>
+  <data name="SavingCommentFailed" xml:space="preserve">
+    <value>An error occured during saving your comment.</value>
+  </data>
   <data name="ServerError1" xml:space="preserve">
     <value>An unexpected error occured</value>
+  </data>
+  <data name="UnsupportedMediaType" xml:space="preserve">
+    <value>Used media is unsupported.</value>
   </data>
   <data name="Warning1" xml:space="preserve">
     <value>I am warning you!</value>

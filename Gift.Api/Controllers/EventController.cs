@@ -33,7 +33,7 @@ namespace Gift.Api.Controllers
         {
             if (!Request.Content.IsMimeMultipartContent())
             {
-                throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
+                return ErrorResponse(new ErrorModel(null, Resources.WebApiResource.UnsupportedMediaType, 1), HttpStatusCode.UnsupportedMediaType);
             }
             var virtualPath = "~/App_Data/Temp/FileUploads/Register";
             var rootPath = HttpContext.Current.Server.MapPath(virtualPath);
@@ -43,7 +43,7 @@ namespace Gift.Api.Controllers
             var data = await Request.Content.ReadAsMultipartAsync(provider);
             if (data.FormData["data"] == null)
             {
-                throw new HttpResponseException(HttpStatusCode.BadRequest);
+                return ErrorResponse(new ErrorModel(null, Resources.WebApiResource.CreatingWishlistFailed, 1));
             }
 
             var modelJson = data.FormData["data"];
@@ -61,7 +61,7 @@ namespace Gift.Api.Controllers
 
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return ErrorResponse(new ErrorModel(null, Resources.WebApiResource.CreatingWishlistFailed, 1));
             }
             var eventParams = new EventParams();            
             Mapper.Map(model, eventParams);
@@ -74,7 +74,7 @@ namespace Gift.Api.Controllers
             {
                 var isUsersOwnEvent = _eventService.CheckUserProperty(eventParams);
                 if (!isUsersOwnEvent)
-                    return ErrorResponse(new ErrorModel(null, Resources.WebApiResource.Error1, 1));
+                    return ErrorResponse(new ErrorModel(null, Resources.WebApiResource.CreatingWishlistFailed, 1));
             }
 
             _eventService.CreateOrUpdate(eventParams);

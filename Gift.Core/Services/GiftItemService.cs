@@ -29,7 +29,7 @@ namespace Gift.Core.Services
                             Id = x.Id,
                             EventId = x.EventId,
                             UserId = x.UserId,
-                            GiftImagePath = x.GiftImagePath,
+                            GiftImagePath = "http://192.168.0.16:54635" + x.GiftImagePath,
                             IsBought = x.IsBought,
                             GiftItemName = x.GiftItemName
                         }).Where(x => x.EventId == eventId).ToList();

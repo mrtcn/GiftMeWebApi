@@ -67,16 +67,16 @@ namespace Gift.Api.Controllers.Account
             ApplicationUser user = _applicationUserManager.Find(new UserLoginInfo(model.LoginProvider, model.ProviderKey));
 
             if (user == null)
-                return BadRequest();
+                return ErrorResponse(new ErrorModel(null, Resources.WebApiResource.Error1, 1));
 
-            return Ok(new UserBindingModel(user));
+            return SuccessResponse(new SuccessModel(new UserBindingModel(user)));
         }
 
         [System.Web.Http.Authorize]
         public IHttpActionResult UpdateUserInfo(UserInfoViewModel model)
         {
             if(model.Id != User.Identity.GetUserId<int>())
-                return BadRequest("Update request failed");
+                return ErrorResponse(new ErrorModel(null, Resources.WebApiResource.Error1, 1));
 
             //ExternalLoginData externalLogin = ExternalLoginData.FromIdentity(User.Identity as ClaimsIdentity);
 
@@ -84,7 +84,7 @@ namespace Gift.Api.Controllers.Account
             AutoMapper.Mapper.Map(model, user);
             _applicationUserManager.Update(user);
 
-            return Ok(new UserBindingModel(user));
+            return SuccessResponse(new SuccessModel(new UserBindingModel(user)));
         }
 
         // POST api/Account/Logout
@@ -92,7 +92,7 @@ namespace Gift.Api.Controllers.Account
         public IHttpActionResult Logout()
         {
             Authentication.SignOut(DefaultAuthenticationTypes.ExternalBearer);
-            return Ok(true);
+            return SuccessResponse(new SuccessModel(true));
         }
 
         // GET api/Account/ManageInfo?returnUrl=%2F&generateState=true
@@ -141,7 +141,7 @@ namespace Gift.Api.Controllers.Account
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return ErrorResponse(new ErrorModel(null, Resources.WebApiResource.ChangePasswordFailed, 1));
             }
 
             IdentityResult result = await _applicationUserManager.ChangePasswordAsync(Int32.Parse(User.Identity.GetUserId()), model.OldPassword,
@@ -149,10 +149,10 @@ namespace Gift.Api.Controllers.Account
 
             if (!result.Succeeded)
             {
-                return GetErrorResult(result);
+                return ErrorResponse(new ErrorModel(null, Resources.WebApiResource.ChangePasswordFailed, 1));
             }
 
-            return Ok();
+            return SuccessResponse(new SuccessModel(null));
         }
 
         // POST api/Account/SetPassword
@@ -161,17 +161,17 @@ namespace Gift.Api.Controllers.Account
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return ErrorResponse(new ErrorModel(null, Resources.WebApiResource.ChangePasswordFailed, 1));
             }
 
             IdentityResult result = await _applicationUserManager.AddPasswordAsync(Int32.Parse(User.Identity.GetUserId()), model.NewPassword);
 
             if (!result.Succeeded)
             {
-                return GetErrorResult(result);
+                 return ErrorResponse(new ErrorModel(null, Resources.WebApiResource.ChangePasswordFailed, 1));
             }
 
-            return Ok();
+            return SuccessResponse(new SuccessModel(null));
         }
 
         // POST api/Account/AddLogin
@@ -180,7 +180,7 @@ namespace Gift.Api.Controllers.Account
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return ErrorResponse(new ErrorModel(null, Resources.WebApiResource.LoginFailed, 1));
             }
             Authentication.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
 
@@ -188,7 +188,7 @@ namespace Gift.Api.Controllers.Account
 
             if ( ticket?.Identity == null || (ticket.Properties?.ExpiresUtc != null 
                 && ticket.Properties.ExpiresUtc.Value < DateTimeOffset.UtcNow)) {
-                return BadRequest("Login Failure");
+                return ErrorResponse(new ErrorModel(null, Resources.WebApiResource.LoginFailed, 1));
             }            
 
             var userIdString = ticket.Identity.GetUserId();
@@ -197,14 +197,14 @@ namespace Gift.Api.Controllers.Account
             if (Int32.TryParse(userIdString, out userIdInt)) {
                 userId = userIdInt;
             } else {
-                return BadRequest("Login Failed");
+                return ErrorResponse(new ErrorModel(null, Resources.WebApiResource.LoginFailed, 1));
             }
 
             LoginData data = LoginData.FromIdentity(ticket.Identity);
 
             if (data == null)
             {
-                return BadRequest("The login is already associated with an account.");
+                return ErrorResponse(new ErrorModel(null, Resources.WebApiResource.LoginAlreadyAssociated, 1));
             }
 
             IdentityResult result = await _applicationUserManager.AddLoginAsync(userId,
@@ -212,10 +212,10 @@ namespace Gift.Api.Controllers.Account
 
             if (!result.Succeeded)
             {
-                return GetErrorResult(result);
+                return ErrorResponse(new ErrorModel(null, Resources.WebApiResource.LoginFailed, 1));
             }
 
-            return Ok();
+            return SuccessResponse(new SuccessModel(null));
         }
         
         // POST api/Account/AddExternalLogin
@@ -224,7 +224,7 @@ namespace Gift.Api.Controllers.Account
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return ErrorResponse(new ErrorModel(null, Resources.WebApiResource.ExternalLoginFailed, 1));
             }
 
             Authentication.SignOut(DefaultAuthenticationTypes.ExternalBearer);
@@ -235,14 +235,14 @@ namespace Gift.Api.Controllers.Account
                 && ticket.Properties.ExpiresUtc.HasValue
                 && ticket.Properties.ExpiresUtc.Value < DateTimeOffset.UtcNow))
             {
-                return BadRequest("External login failure.");
+                return ErrorResponse(new ErrorModel(null, Resources.WebApiResource.ExternalLoginFailed, 1));
             }
 
             ExternalLoginData externalData = ExternalLoginData.FromIdentity(ticket.Identity);
 
             if (externalData == null)
             {
-                return BadRequest("The external login is already associated with an account.");
+                return ErrorResponse(new ErrorModel(null, Resources.WebApiResource.ExternalLoginAlreadyAssociated, 1));
             }
 
             IdentityResult result = await _applicationUserManager.AddLoginAsync(Int32.Parse(User.Identity.GetUserId()),
@@ -250,10 +250,10 @@ namespace Gift.Api.Controllers.Account
 
             if (!result.Succeeded)
             {
-                return GetErrorResult(result);
+                return ErrorResponse(new ErrorModel(null, Resources.WebApiResource.ExternalLoginFailed, 1));
             }
 
-            return Ok();
+            return SuccessResponse(new SuccessModel(null));
         }
 
         // POST api/Account/RemoveLogin
@@ -262,7 +262,7 @@ namespace Gift.Api.Controllers.Account
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return ErrorResponse(new ErrorModel(null, Resources.WebApiResource.RemoveUserFailed, 1));
             }
 
             IdentityResult result;
@@ -279,10 +279,10 @@ namespace Gift.Api.Controllers.Account
 
             if (!result.Succeeded)
             {
-                return GetErrorResult(result);
+                return ErrorResponse(new ErrorModel(null, Resources.WebApiResource.RemoveUserFailed, 1));
             }
 
-            return Ok();
+            return SuccessResponse(new SuccessModel(null));
         }
 
         // GET api/Account/ExternalLogin
@@ -386,7 +386,7 @@ namespace Gift.Api.Controllers.Account
         {
             if (!Request.Content.IsMimeMultipartContent())
             {
-                throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
+                return ErrorResponse(new ErrorModel(null, Resources.WebApiResource.UnsupportedMediaType, 1), HttpStatusCode.UnsupportedMediaType);
             }
             var virtualPath = "~/App_Data/Temp/FileUploads/Register";
             var rootPath = HttpContext.Current.Server.MapPath(virtualPath);
@@ -396,7 +396,7 @@ namespace Gift.Api.Controllers.Account
             var data = await Request.Content.ReadAsMultipartAsync(provider);
             if (data.FormData["data"] == null)
             {
-                throw new HttpResponseException(HttpStatusCode.BadRequest);
+                return ErrorResponse(new ErrorModel(null, Resources.WebApiResource.RegisterFailed, 1));
             }
 
             var modelJson = data.FormData["data"];
@@ -414,7 +414,7 @@ namespace Gift.Api.Controllers.Account
 
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return ErrorResponse(new ErrorModel(null, Resources.WebApiResource.RegisterFailed, 1));
             }
 
             var user = new ApplicationUser()
@@ -425,14 +425,14 @@ namespace Gift.Api.Controllers.Account
                 LastName = model.LastName,
                 Gender = model.Gender,
                 FullName = model.FullName,
-                ImagePath = fileFullPath?.AbsoluteUri
+                ImagePath = fileFullPath?.AbsolutePath
             };
 
             IdentityResult result = await _applicationUserManager.CreateAsync(user, model.Password);
 
             if (!result.Succeeded)
             {
-                return GetErrorResult(result);
+                return ErrorResponse(new ErrorModel(null, Resources.WebApiResource.RegisterFailed, 1));
             }
 
             var identity = await user.GenerateUserIdentityAsync(_applicationUserManager, DefaultAuthenticationTypes.ApplicationCookie);
@@ -440,9 +440,9 @@ namespace Gift.Api.Controllers.Account
             var userId = 0;
             Int32.TryParse(userIdString, out userId);
             await _applicationUserManager.AddClaimAsync(userId, new Claim("popcorn", "100"));
-            
+
             //Generate Access Token Response
-            return Ok(new UserBindingModel(user));
+            return SuccessResponse(new SuccessModel(new UserBindingModel(user)));
         }
 
         // POST api/Account/RegisterExternal
@@ -453,13 +453,13 @@ namespace Gift.Api.Controllers.Account
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return ErrorResponse(new ErrorModel(null, Resources.WebApiResource.ExternalRegisterFailed, 1));
             }
 
             var verifiedAccessToken = await VerifyExternalAccessToken(model.LoginProvider, model.ExternalAccessToken);
             if (verifiedAccessToken == null)
             {
-                return BadRequest("Invalid Provider or External Access Token");
+                return ErrorResponse(new ErrorModel(null, Resources.WebApiResource.ExternalRegisterInvalid, 1));
             }
 
             ApplicationUser user = await _applicationUserManager.FindAsync(new UserLoginInfo(model.LoginProvider, verifiedAccessToken.user_id));
@@ -468,7 +468,7 @@ namespace Gift.Api.Controllers.Account
 
             if (hasRegistered)
             {
-                return BadRequest("External user is already registered");
+                return ErrorResponse(new ErrorModel(null, Resources.WebApiResource.ExternalRegisterAlreadyExists, 1));
             }
 
             user = new ApplicationUser() { UserName = model.UserName, FullName = model.UserName, FirstName = model.FirstName, LastName = model.LastName, Email = model.Email, ImagePath = model.ImagePath};
@@ -476,7 +476,7 @@ namespace Gift.Api.Controllers.Account
             IdentityResult result = await _applicationUserManager.CreateAsync(user);
             if (!result.Succeeded)
             {
-                return GetErrorResult(result);
+                return ErrorResponse(new ErrorModel(null, Resources.WebApiResource.ExternalRegisterFailed, 1));
             }
 
             var info = new ExternalLoginInfo()
@@ -488,10 +488,10 @@ namespace Gift.Api.Controllers.Account
             result = await _applicationUserManager.AddLoginAsync(user.Id, info.Login);
             if (!result.Succeeded)
             {
-                return GetErrorResult(result);
-            }           
+                return ErrorResponse(new ErrorModel(null, Resources.WebApiResource.ExternalRegisterFailed, 1));
+            }
 
-            return Ok(new UserBindingModel(user));
+            return SuccessResponse(new SuccessModel(new UserBindingModel(user, false)));
         }
 
         [System.Web.Http.AllowAnonymous]
@@ -502,13 +502,13 @@ namespace Gift.Api.Controllers.Account
 
             if (string.IsNullOrWhiteSpace(model.LoginProvider) || string.IsNullOrWhiteSpace(model.ExternalAccessToken))
             {
-                return BadRequest("Provider or external access token is not sent");
+                return ErrorResponse(new ErrorModel(null, Resources.WebApiResource.ObtainingUserNotSent, 1));
             }
 
             var verifiedAccessToken = await VerifyExternalAccessToken(model.LoginProvider, model.ExternalAccessToken);
             if (verifiedAccessToken == null)
             {
-                return BadRequest("Invalid Provider or External Access Token");
+                return ErrorResponse(new ErrorModel(null, Resources.WebApiResource.ObtainingUserInvalid, 1));
             }
 
             ApplicationUser user = await _applicationUserManager.FindAsync(new UserLoginInfo(model.LoginProvider, verifiedAccessToken.user_id));
@@ -517,7 +517,7 @@ namespace Gift.Api.Controllers.Account
 
             if (!hasRegistered)
             {
-                return BadRequest("External user is not registered");
+                return ErrorResponse(new ErrorModel(null, Resources.WebApiResource.ObtainingUserFailed, 1));
             }
 
             //generate access token response
@@ -525,8 +525,7 @@ namespace Gift.Api.Controllers.Account
 
             ClaimsIdentity identity = new ClaimsIdentity(OAuthDefaults.AuthenticationType);
 
-            return Ok(accessTokenResponse);
-
+            return SuccessResponse(new SuccessModel(accessTokenResponse));
         }
 
         //protected override void Dispose(bool disposing)
