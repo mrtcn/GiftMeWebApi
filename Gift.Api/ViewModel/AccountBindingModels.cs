@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using Gift.Data.Models;
 using Gift.Data.Models.VariousTypes;
 
@@ -44,10 +45,8 @@ namespace Gift.Api.ViewModel
         {
             Id = user.Id;
             UserName = user.UserName;
-            FirstName = user.FirstName;
-            LastName = user.LastName;
-            FullName = user.FullName;
             Gender = user.Gender;
+            Birthdate = user.Birthdate;
             Email = user.Email;
             ImagePath = addBaseUrlFlag?ApiStarter.BaseUrl + user.ImagePath: user.ImagePath;
         }
@@ -55,8 +54,8 @@ namespace Gift.Api.ViewModel
         public string UserName { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public string FullName { get; set; }
         public GenderType Gender { get; set; }
+        public DateTime Birthdate { get; set; }
         public string Email { get; set; }
         public string ImagePath { get; set; }
     }
@@ -67,8 +66,8 @@ namespace Gift.Api.ViewModel
         string UserName { get; set; }                
         string FirstName { get; set; }
         string LastName { get; set; }
-        string FullName { get; set; }
         GenderType Gender { get; set; }
+        DateTime Birthdate { get; set; }
         string Email { get; set; }
         string ImagePath { get; set; }
     }

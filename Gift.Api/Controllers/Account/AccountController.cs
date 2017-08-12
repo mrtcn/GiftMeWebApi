@@ -384,11 +384,11 @@ namespace Gift.Api.Controllers.Account
         [System.Web.Http.Route("Register")]
         public async Task<IHttpActionResult> Register()
         {
-            if (!Request.Content.IsMimeMultipartContent())
-            {
-                return ErrorResponse(new ErrorModel(null, Resources.WebApiResource.UnsupportedMediaType, 1), HttpStatusCode.UnsupportedMediaType);
-            }
-            var virtualPath = "~/App_Data/Temp/FileUploads/Register";
+            //if (!Request.Content.IsMimeMultipartContent())
+            //{
+            //    return ErrorResponse(new ErrorModel(null, Resources.WebApiResource.UnsupportedMediaType, 1), HttpStatusCode.UnsupportedMediaType);
+            //}
+            var virtualPath = "~/App_Data/Temp/FileUploads/Register/";
             var rootPath = HttpContext.Current.Server.MapPath(virtualPath);
 
             Directory.CreateDirectory(rootPath);
@@ -421,11 +421,11 @@ namespace Gift.Api.Controllers.Account
             {
                 UserName = model.UserName,
                 Email = model.Email,
-                FirstName = model.FirstName,
-                LastName = model.LastName,
                 Gender = model.Gender,
-                FullName = model.FullName,
-                ImagePath = fileFullPath?.AbsolutePath
+                Birthdate = model.Birthdate,
+                ImagePath = fileFullPath?.AbsolutePath,
+                FirstName = string.Empty,
+                LastName = string.Empty
             };
 
             IdentityResult result = await _applicationUserManager.CreateAsync(user, model.Password);
@@ -439,11 +439,48 @@ namespace Gift.Api.Controllers.Account
             var userIdString = identity.GetUserId();
             var userId = 0;
             Int32.TryParse(userIdString, out userId);
-            await _applicationUserManager.AddClaimAsync(userId, new Claim("popcorn", "100"));
 
             //Generate Access Token Response
             return SuccessResponse(new SuccessModel(new UserBindingModel(user)));
         }
+
+        // POST api/Account/Register
+        [System.Web.Http.AllowAnonymous]
+        [System.Web.Http.Route("RegisterWithoutPhoto")]
+        public async Task<IHttpActionResult> Register(RegisterViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return ErrorResponse(new ErrorModel(null, Resources.WebApiResource.RegisterFailed, 1));
+            }
+
+            var user = new ApplicationUser()
+            {
+                UserName = model.UserName,
+                Email = model.Email,
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                Gender = model.Gender,
+                Birthdate = model.Birthdate
+            };
+
+            IdentityResult result = await _applicationUserManager.CreateAsync(user, model.Password);
+
+            if (!result.Succeeded)
+            {
+                return ErrorResponse(new ErrorModel(null, Resources.WebApiResource.RegisterFailed, 1));
+            }
+
+            var identity = await user.GenerateUserIdentityAsync(_applicationUserManager, DefaultAuthenticationTypes.ApplicationCookie);
+            var userIdString = identity.GetUserId();
+            var userId = 0;
+            Int32.TryParse(userIdString, out userId);
+
+            //Generate Access Token Response
+            //var accessTokenResponse = GenerateLocalAccessTokenResponse(model.UserName);
+            return SuccessResponse(new SuccessModel(new UserBindingModel(user)));
+        }
+
 
         // POST api/Account/RegisterExternal
         [System.Web.Http.OverrideAuthentication]
@@ -471,7 +508,7 @@ namespace Gift.Api.Controllers.Account
                 return ErrorResponse(new ErrorModel(null, Resources.WebApiResource.ExternalRegisterAlreadyExists, 1));
             }
 
-            user = new ApplicationUser() { UserName = model.UserName, FullName = model.UserName, FirstName = model.FirstName, LastName = model.LastName, Email = model.Email, ImagePath = model.ImagePath};
+            user = new ApplicationUser() { UserName = model.UserName, FirstName = string.Empty, LastName = string.Empty, Email = model.Email, ImagePath = model.ImagePath};
 
             IdentityResult result = await _applicationUserManager.CreateAsync(user);
             if (!result.Succeeded)

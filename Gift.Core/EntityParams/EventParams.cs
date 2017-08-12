@@ -49,7 +49,6 @@ namespace Gift.Core.EntityParams {
                     x =>
                         new AddedEventUser
                         {
-                            FullName = x.User.FullName,
                             UserId = x.UserId,
                             UserImagePath = x.User.ImagePath
                         }).ToList();
@@ -58,7 +57,6 @@ namespace Gift.Core.EntityParams {
                     x =>
                         new AddedEventUser()
                         {
-                            FullName = x.User.FullName,
                             UserId = x.UserId,
                             UserImagePath = x.User.ImagePath
                         }).FirstOrDefault(x => x.UserId == model.UserId);
@@ -90,12 +88,14 @@ namespace Gift.Core.EntityParams {
             EventName = model.EventName;
             EventImagePath = model.EventImagePath;
             EventTypeId = model.EventTypeId;
+            EventBoughtItemAmount = model.GiftItems.Where(x => x.IsBought && x.Status == Status.Active).Count();
+            EventLeftItemAmount = model.GiftItems.Where(x => !x.IsBought && x.Status == Status.Active).Count();
+            EventItemAmount = model.GiftItems.Where(x => x.Status == Status.Active).Count();
             EventOwner =
                model.UserEvents.Select(
                    x =>
                        new AddedEventUser()
                        {
-                           FullName = x.User.FullName,
                            UserId = x.UserId,
                            UserImagePath = x.User.ImagePath
                        }).FirstOrDefault(x => x.UserId == model.UserId);
@@ -104,6 +104,9 @@ namespace Gift.Core.EntityParams {
         public string EventName { get; set; }
         public string EventImagePath { get; set; }
         public int EventTypeId { get; set; }
+        public int EventBoughtItemAmount { get; set; }
+        public int EventLeftItemAmount { get; set; }
+        public int EventItemAmount { get; set; }
         public DateTime? EventDate { get; set; }
         public AddedEventUser EventOwner { get; set; }
     }
@@ -111,8 +114,8 @@ namespace Gift.Core.EntityParams {
     public class AddedEventUser
     {
         public int UserId { get; set; }
-        public string FullName { get; set; }
-        public string UserImagePath { get; set; }        
+        public string UserImagePath { get; set; }
+        public string UserName { get; set; }
     }
 
     public class GiftItemModel

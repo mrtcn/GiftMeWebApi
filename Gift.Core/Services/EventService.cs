@@ -89,11 +89,14 @@ namespace Gift.Core.Services
                     EventOwner = new AddedEventUser
                     {
                         UserId = x.User.Id,
-                        FullName = x.User.FullName,
-                        UserImagePath = "http://192.168.0.16:54635" + x.User.ImagePath
+                        UserImagePath = "http://192.168.0.16:54635" + x.User.ImagePath,
+                        UserName = x.User.FirstName + " " + x.User.LastName
                     },
                     EventDate = x.EventDate,
                     EventName = x.EventName,
+                    EventBoughtItemAmount = x.GiftItems.Where(z => z.IsBought && z.Status == Status.Active).Count(),
+                    EventLeftItemAmount = x.GiftItems.Where(z => !z.IsBought && z.Status == Status.Active).Count(),
+                    EventItemAmount = x.GiftItems.Where(z => z.Status == Status.Active).Count(),
                     EventImagePath = "http://192.168.0.16:54635" + x.EventImagePath,
                     EventTypeId = x.EventTypeId,
                     Id = x.Id
@@ -109,11 +112,14 @@ namespace Gift.Core.Services
                     EventOwner = new AddedEventUser
                     {
                         UserId = x.User.Id,
-                        FullName = x.User.FullName,
-                        UserImagePath = "http://192.168.0.16:54635" + x.User.ImagePath
+                        UserImagePath = "http://192.168.0.16:54635" + x.User.ImagePath,
+                        UserName = x.User.FirstName + " " + x.User.LastName
                     },
                     EventDate = x.EventDate,
                     EventName = x.EventName,
+                    EventBoughtItemAmount = x.GiftItems.Where(z => z.IsBought && z.Status == Status.Active).Count(),
+                    EventLeftItemAmount = x.GiftItems.Where(z => !z.IsBought && z.Status == Status.Active).Count(),
+                    EventItemAmount = x.GiftItems.Where(z => z.Status == Status.Active).Count(),
                     EventImagePath = "http://192.168.0.16:54635" + x.EventImagePath,                   
                     EventTypeId = x.EventTypeId,                    
                     Id = x.Id
@@ -131,11 +137,14 @@ namespace Gift.Core.Services
                     EventOwner = new AddedEventUser
                     {
                         UserId = x.User.Id,
-                        FullName = x.User.FullName,
-                        UserImagePath = "http://192.168.0.16:54635" + x.User.ImagePath
+                        UserImagePath = "http://192.168.0.16:54635" + x.User.ImagePath,
+                        UserName = x.User.FirstName + " " + x.User.LastName
                     },
                     EventDate = x.EventDate,
                     EventName = x.EventName,
+                    EventBoughtItemAmount = x.GiftItems.Where(z => z.IsBought && z.Status == Status.Active).Count(),
+                    EventLeftItemAmount = x.GiftItems.Where(z => !z.IsBought && z.Status == Status.Active).Count(),
+                    EventItemAmount = x.GiftItems.Where(z => z.Status == Status.Active).Count(),
                     EventImagePath = "http://192.168.0.16:54635" + x.EventImagePath,                 
                     EventTypeId = x.EventTypeId,                    
                     Id = x.Id
