@@ -299,6 +299,7 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\Account\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\FavoriteEventController.cs" />
     <Compile Include="Controllers\CommentController.cs" />
     <Compile Include="Controllers\GiftItemController.cs" />
     <Compile Include="Controllers\FriendController.cs" />
@@ -324,6 +325,7 @@
     <Compile Include="Utilities\Helpers\ImageHelper.cs" />
     <Compile Include="ViewModel\AccountBindingModels.cs" />
     <Compile Include="ViewModel\AccountViewModel.cs" />
+    <Compile Include="ViewModel\FavoriteEventViewModel.cs" />
     <Compile Include="ViewModel\GiftItemViewModel.cs" />
     <Compile Include="ViewModel\EventManagementModel.cs" />
     <Compile Include="ViewModel\CommentViewModel.cs" />

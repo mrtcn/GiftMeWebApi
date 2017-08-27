@@ -6,6 +6,9 @@ namespace Gift.Data.Entities {
     public interface IGiftItem : IEntity, IUserId, IHasStatus, ITracingFieldsModel {
         string GiftItemName { get; set; }
         string GiftImagePath { get; set; }
+        string Brand { get; set; }
+        string Description { get; set; }
+        int Amount { get; set; }
         int? EventId { get; set; }
         bool IsBought { get; set; }
     }
@@ -15,6 +18,9 @@ namespace Gift.Data.Entities {
         public int Id { get; set; }
         public string GiftItemName { get; set; }
         public string GiftImagePath { get; set; }
+        public string Brand { get; set; }
+        public string Description { get; set; }
+        public int Amount { get; set; }
         public int? EventId { get; set; }
         public int UserId { get; set; }
         public bool IsBought { get; set; }

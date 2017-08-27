@@ -120,6 +120,9 @@
   <data name="ChangePasswordFailed" xml:space="preserve">
     <value>An error occured during changing password</value>
   </data>
+  <data name="CreatingFavoritesFailed" xml:space="preserve">
+    <value>An error occured during adding wishlist into favorites.</value>
+  </data>
   <data name="CreatingItemFailed" xml:space="preserve">
     <value>An error occured during creating your wishlist item.</value>
   </data>

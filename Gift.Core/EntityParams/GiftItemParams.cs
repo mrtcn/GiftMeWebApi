@@ -6,6 +6,9 @@ namespace Gift.Core.EntityParams {
         public int Id { get; set; }
         public string GiftItemName { get; set; }
         public string GiftImagePath { get; set; }
+        public string Brand { get; set; }
+        public string Description { get; set; }
+        public int Amount { get; set; }
         public int? EventId { get; set; }
         public int UserId { get; set; }
         public bool IsBought { get; set; }

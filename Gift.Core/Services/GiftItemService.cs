@@ -9,7 +9,8 @@ namespace Gift.Core.Services
 {
     public interface IGiftItemService : IBaseService<GiftItem>
     {
-        List<GiftItemModel> GiftItemListByEventId(int eventId);
+        List<GiftItemModel> GiftItemListByEventId(int eventId, int userId);
+        int GetGiftStatus(bool isBought, int giftOwnerId, int eventOwnerId, List<int> eventAttendeeIds, int userId);
     }
 
     public class GiftItemService : BaseService<GiftItem>, IGiftItemService {
@@ -19,20 +20,45 @@ namespace Gift.Core.Services
             _repository = repository;
         }
 
-        public List<GiftItemModel> GiftItemListByEventId(int eventId)
+        public List<GiftItemModel> GiftItemListByEventId(int eventId, int userId)
         {
-            return
-                Entities.Select(
-                    x =>
-                        new GiftItemModel
-                        {
-                            Id = x.Id,
-                            EventId = x.EventId,
-                            UserId = x.UserId,
-                            GiftImagePath = "http://192.168.0.16:54635" + x.GiftImagePath,
-                            IsBought = x.IsBought,
-                            GiftItemName = x.GiftItemName
-                        }).Where(x => x.EventId == eventId).ToList();
+            
+                var gift = Entities.Select(x =>
+                new GiftItemModel
+                {
+                    Id = x.Id,
+                    EventId = x.EventId,
+                    EventOwnerId = x.Event.UserId,
+                    EventAttendeeIds = x.Event.UserEvents.Where(z => z.Status == Data.Models.Status.Active).Select(z => z.UserId).ToList(),
+                    UserId = x.UserId,
+                    GiftImagePath = CoreSettings.BaseUrl + x.GiftImagePath,
+                    Brand = x.Brand,
+                    Amount = x.Amount,
+                    Description = x.Description,
+                    IsBought = x.IsBought,                    
+                    GiftItemName = x.GiftItemName
+                }).Where(x => x.EventId == eventId).ToList();
+            gift.ForEach(x => x.GiftStatus = GetGiftStatus(x.IsBought, x.UserId, x.EventOwnerId, x.EventAttendeeIds, userId));
+            return gift;
         }
-    }
+
+        public int GetGiftStatus(bool isBought, int giftOwnerId, int eventOwnerId, List<int> eventAttendeeIds, int userId)
+        {
+            if (!isBought && eventAttendeeIds.Contains(userId) )
+            {
+                // Free To Reserve
+                return 0;
+            }
+            else if (isBought && (userId == giftOwnerId || userId == eventOwnerId))
+            {
+                // Reserved and has right to cancel it
+                return 1;
+            }
+            else
+            {
+                // Reserved and doesn't have right to cancel it
+                return 2;
+            }
+        }
+    }    
 }

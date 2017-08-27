@@ -42,7 +42,7 @@ namespace Gift.Api.Controllers
             //Check If User is updating his/her own comment
             var isUsersOwnEvent = _giftItemCommentService.CheckUserProperty(giftItemCommentParams);
 
-            if (!isUsersOwnEvent)
+            if (isUsersOwnEvent != null && !isUsersOwnEvent.GetValueOrDefault())
                 return ErrorResponse(new ErrorModel(null, Resources.WebApiResource.SavingCommentFailed, 1));
 
             var giftItemComment = _giftItemCommentService.CreateOrUpdate(giftItemCommentParams);
@@ -78,7 +78,7 @@ namespace Gift.Api.Controllers
             //Check If User is updating his/her own comment
             var isUsersOwnEvent = _eventCommentService.CheckUserProperty(eventCommentParams);
 
-            if (!isUsersOwnEvent)
+            if (isUsersOwnEvent != null && !isUsersOwnEvent.GetValueOrDefault())
                 return ErrorResponse(new ErrorModel(null, Resources.WebApiResource.SavingCommentFailed, 1));
 
             var eventComment = _eventCommentService.CreateOrUpdate(eventCommentParams);

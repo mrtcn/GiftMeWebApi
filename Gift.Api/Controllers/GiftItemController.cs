@@ -35,7 +35,7 @@ namespace Gift.Api.Controllers
             {
                 return ErrorResponse(new ErrorModel(null, Resources.WebApiResource.UnsupportedMediaType, 1), HttpStatusCode.UnsupportedMediaType);
             }
-            var virtualPath = "~/App_Data/Temp/FileUploads/Register";
+            var virtualPath = "~/Register";
             var rootPath = HttpContext.Current.Server.MapPath(virtualPath);
 
             Directory.CreateDirectory(rootPath);
@@ -72,7 +72,7 @@ namespace Gift.Api.Controllers
             if (giftItemParams.Id != 0)
             {
                 var isUsersOwnGiftItem = _giftItemService.CheckUserProperty(giftItemParams);
-                if (!isUsersOwnGiftItem)
+                if (isUsersOwnGiftItem != null && !isUsersOwnGiftItem.GetValueOrDefault())
                     return ErrorResponse(new ErrorModel(null, Resources.WebApiResource.CreatingItemFailed, 1));
             }
             //CreatedBy and UpdatedBy 
@@ -85,12 +85,30 @@ namespace Gift.Api.Controllers
              return SuccessResponse(new SuccessModel(giftItemParams.Id));
         }
 
+        [Route("ToggleGiftItemBuyStatus")]
+        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer), HttpPost]
+        public IHttpActionResult ToggleGiftItemBuyStatus(ToggleBuyStatusModel model)
+        {
+            var giftItem = _giftItemService.Get(model.Id);
+
+            var giftItemParams = new GiftItemParams();
+            Mapper.Map(giftItem, giftItemParams);
+
+            /* Get and Assign UserId */
+            giftItemParams.UserId = User.Identity.GetUserId<int>();
+            giftItemParams.IsBought = model.IsBought;
+
+            giftItem = _giftItemService.CreateOrUpdate(giftItemParams);
+            return SuccessResponse(new SuccessModel(new GiftItemModel(giftItem)));
+        }
+        
         [Route("GiftItemList")]
         [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer), HttpPost]
-        public IHttpActionResult GiftItemListByEventId(GiftItemIdModel model)
+        public IHttpActionResult GiftItemListByEventId(EventIdModel model)
         {
-            var giftItemList = _giftItemService.GiftItemListByEventId(model.GiftItemId);
-            return Ok(giftItemList);
+            var userId = User.Identity.GetUserId<int>();
+            var giftItemList = _giftItemService.GiftItemListByEventId(model.EventId, userId);
+            return SuccessResponse(new SuccessModel(giftItemList));
         }
 
         [Route("GetGiftItemById")]

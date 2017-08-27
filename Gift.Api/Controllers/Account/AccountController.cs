@@ -388,7 +388,7 @@ namespace Gift.Api.Controllers.Account
             //{
             //    return ErrorResponse(new ErrorModel(null, Resources.WebApiResource.UnsupportedMediaType, 1), HttpStatusCode.UnsupportedMediaType);
             //}
-            var virtualPath = "~/App_Data/Temp/FileUploads/Register/";
+            var virtualPath = "~/Register/";
             var rootPath = HttpContext.Current.Server.MapPath(virtualPath);
 
             Directory.CreateDirectory(rootPath);

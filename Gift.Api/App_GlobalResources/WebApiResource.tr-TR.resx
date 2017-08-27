@@ -120,6 +120,9 @@
   <data name="ChangePasswordFailed" xml:space="preserve">
     <value>Şifre değiştirilirken bir hata oluştu.</value>
   </data>
+  <data name="CreatingFavoritesFailed" xml:space="preserve">
+    <value>Favorilere eklenirken bir hata oluştu.</value>
+  </data>
   <data name="CreatingItemFailed" xml:space="preserve">
     <value>Wishlist ürünü oluşturulurken bir hata oluştu.</value>
   </data>

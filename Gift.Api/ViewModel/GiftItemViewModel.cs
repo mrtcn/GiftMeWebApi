@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Gift.Core.EntityParams;
-using Gift.Data.Models;
-
-namespace Gift.Api.ViewModel
+﻿namespace Gift.Api.ViewModel
 {
     public class GiftItemViewModel
     {
@@ -18,5 +13,11 @@ namespace Gift.Api.ViewModel
     public class GiftItemIdModel
     {
         public int GiftItemId { get; set; }
+    }
+
+    public class ToggleBuyStatusModel
+    {
+        public int Id { get; set; }
+        public bool IsBought { get; set; }
     }
 }

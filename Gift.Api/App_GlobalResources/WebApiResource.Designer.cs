@@ -70,6 +70,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to An error occured during adding wishlist into favorites..
+        /// </summary>
+        internal static string CreatingFavoritesFailed {
+            get {
+                return ResourceManager.GetString("CreatingFavoritesFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to An error occured during creating your wishlist item..
         /// </summary>
         internal static string CreatingItemFailed {

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
 using Gift.Core.Model;
 using Gift.Data.Entities;
@@ -42,16 +41,9 @@ namespace Gift.Core.EntityParams {
             EventImagePath = model.EventImagePath;
             UserId = model.UserId;
             EventTypeId = model.EventTypeId;
-            Permission = model.Permission;
-            GiftItemList = model.GiftItems?.Select(x => new GiftItemModel(x)).ToList();
-            Users =
-                model.UserEvents?.Select(
-                    x =>
-                        new AddedEventUser
-                        {
-                            UserId = x.UserId,
-                            UserImagePath = x.User.ImagePath
-                        }).ToList();
+            Permission = model.Permission;            
+            IsFavoriteEvent = model.FavoriteEvents
+                .Any(x => x.EventId == model.Id && x.UserId == model.UserId && x.Status == Status.Active);           
             EventOwner =
                 model.UserEvents?.Select(
                     x =>
@@ -64,13 +56,12 @@ namespace Gift.Core.EntityParams {
         public int Id { get; set; }
         public string EventName { get; set; }
         public string EventImagePath { get; set; }
+        public bool IsFavoriteEvent { get; set; }
         public int EventTypeId { get; set; }
         public int UserId { get; set; }
         public DateTime? EventDate { get; set; }
         public PermissionStatus Permission { get; set; }
 
-        public List<GiftItemModel> GiftItemList { get; set; }
-        public List<AddedEventUser> Users { get; set; }
         public AddedEventUser EventOwner { get; set; }
     }
 
@@ -91,6 +82,7 @@ namespace Gift.Core.EntityParams {
             EventBoughtItemAmount = model.GiftItems.Where(x => x.IsBought && x.Status == Status.Active).Count();
             EventLeftItemAmount = model.GiftItems.Where(x => !x.IsBought && x.Status == Status.Active).Count();
             EventItemAmount = model.GiftItems.Where(x => x.Status == Status.Active).Count();
+            IsFavoriteEvent = model.FavoriteEvents.Any(x => x.EventId == model.Id && x.UserId == model.UserId && x.Status == Status.Active);
             EventOwner =
                model.UserEvents.Select(
                    x =>
@@ -106,7 +98,8 @@ namespace Gift.Core.EntityParams {
         public int EventTypeId { get; set; }
         public int EventBoughtItemAmount { get; set; }
         public int EventLeftItemAmount { get; set; }
-        public int EventItemAmount { get; set; }
+        public int EventItemAmount { get; set; }        
+        public bool IsFavoriteEvent { get; set; }
         public DateTime? EventDate { get; set; }
         public AddedEventUser EventOwner { get; set; }
     }
@@ -130,15 +123,27 @@ namespace Gift.Core.EntityParams {
             Id = model.Id;
             GiftItemName = model.GiftItemName;
             GiftImagePath = model.GiftImagePath;
+            Brand = model.Brand;
+            Description = model.Description;
+            Amount = model.Amount;
             EventId = model.EventId;
+            EventOwnerId = model.Event.UserId;
+            EventAttendeeIds = model.Event.UserEvents.Select(x => x.UserId).ToList();
             UserId = model.UserId;
             IsBought = model.IsBought;
         }
+        
         public int Id { get; set; }
         public string GiftItemName { get; set; }
         public string GiftImagePath { get; set; }
+        public string Brand { get; set; }
+        public string Description { get; set; }
+        public int Amount { get; set; }
         public int? EventId { get; set; }
+        public int EventOwnerId { get; set; }
+        public List<int> EventAttendeeIds { get; set; }
         public int UserId { get; set; }
         public bool IsBought { get; set; }
+        public int GiftStatus { get; set; }
     }
 }

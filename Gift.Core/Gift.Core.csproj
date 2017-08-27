@@ -107,6 +107,7 @@
     <Compile Include="BaseServices\CulturedBaseService.cs" />
     <Compile Include="Class1.cs" />
     <Compile Include="EntityParams\CityParams.cs" />
+    <Compile Include="EntityParams\FavoriteEventParams.cs" />
     <Compile Include="EntityParams\EventCommentParams.cs" />
     <Compile Include="EntityParams\UserEventParams.cs" />
     <Compile Include="EntityParams\GiftItemParams.cs" />
@@ -132,6 +133,7 @@
     <Compile Include="Mvc\ModelBinders\StatusModelBinder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\CityService.cs" />
+    <Compile Include="Services\FavoriteEventService.cs" />
     <Compile Include="Services\UserEventService.cs" />
     <Compile Include="Services\FriendService.cs" />
     <Compile Include="Services\EventTypeService.cs" />

@@ -93,6 +93,7 @@
     <Compile Include="App_Start\UnityConfig.cs" />
     <Compile Include="App_Start\UnityMvcActivator.cs" />
     <Compile Include="Class1.cs" />
+    <Compile Include="Entities\FavoriteEvent.cs" />
     <Compile Include="Entities\Friend.cs" />
     <Compile Include="Entities\GiftItemComment.cs" />
     <Compile Include="Entities\EventComment.cs" />
@@ -110,6 +111,7 @@
     <Compile Include="Entities\SupplementaryModels\TracingDateModel.cs" />
     <Compile Include="Entities\SupplementaryModels\TracingFieldsModel.cs" />
     <Compile Include="Entities\UserEvent.cs" />
+    <Compile Include="Mappings\FavoriteEventMap.cs" />
     <Compile Include="Mappings\UserEventMap.cs" />
     <Compile Include="Mappings\GiftAutoCompleteMap.cs" />
     <Compile Include="Mappings\EventTypeMap.cs" />
@@ -140,6 +142,30 @@
     <Compile Include="Migrations\201708031928436_ApplicationUserRemoveFullName.cs" />
     <Compile Include="Migrations\201708031928436_ApplicationUserRemoveFullName.Designer.cs">
       <DependentUpon>201708031928436_ApplicationUserRemoveFullName.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201708201621075_GiftItemBrand.cs" />
+    <Compile Include="Migrations\201708201621075_GiftItemBrand.Designer.cs">
+      <DependentUpon>201708201621075_GiftItemBrand.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201708201631122_GiftItemAmount.cs" />
+    <Compile Include="Migrations\201708201631122_GiftItemAmount.Designer.cs">
+      <DependentUpon>201708201631122_GiftItemAmount.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201708201703185_GiftItemDescription.cs" />
+    <Compile Include="Migrations\201708201703185_GiftItemDescription.Designer.cs">
+      <DependentUpon>201708201703185_GiftItemDescription.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201708211811569_GiftItemEventMaxLengths.cs" />
+    <Compile Include="Migrations\201708211811569_GiftItemEventMaxLengths.Designer.cs">
+      <DependentUpon>201708211811569_GiftItemEventMaxLengths.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201708221754445_FavoriteEvent.cs" />
+    <Compile Include="Migrations\201708221754445_FavoriteEvent.Designer.cs">
+      <DependentUpon>201708221754445_FavoriteEvent.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201708231632200_FavoriteEventForeignConstraint.cs" />
+    <Compile Include="Migrations\201708231632200_FavoriteEventForeignConstraint.Designer.cs">
+      <DependentUpon>201708231632200_FavoriteEventForeignConstraint.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ActionTypes.cs" />
@@ -178,6 +204,24 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201708031928436_ApplicationUserRemoveFullName.resx">
       <DependentUpon>201708031928436_ApplicationUserRemoveFullName.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708201621075_GiftItemBrand.resx">
+      <DependentUpon>201708201621075_GiftItemBrand.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708201631122_GiftItemAmount.resx">
+      <DependentUpon>201708201631122_GiftItemAmount.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708201703185_GiftItemDescription.resx">
+      <DependentUpon>201708201703185_GiftItemDescription.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708211811569_GiftItemEventMaxLengths.resx">
+      <DependentUpon>201708211811569_GiftItemEventMaxLengths.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708221754445_FavoriteEvent.resx">
+      <DependentUpon>201708221754445_FavoriteEvent.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708231632200_FavoriteEventForeignConstraint.resx">
+      <DependentUpon>201708231632200_FavoriteEventForeignConstraint.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -14,7 +14,7 @@ namespace Gift.Core.BaseServices
         TEntity Get(int id);
         TEntity CreateOrUpdate(IEntityParams entity);
         RemoveResultStatus Remove(int id, bool permanent = false, bool checkRelations = false);
-        bool CheckUserProperty(IEntityParams entity);
+        bool? CheckUserProperty(IEntityParams entity);
     }
     public abstract class BaseService<TEntity> : IBaseService<TEntity> where TEntity : class, IEntity {
         private readonly IRepository<TEntity> _repository;
@@ -46,9 +46,9 @@ namespace Gift.Core.BaseServices
 
             var entity = Mapper.Map<IEntityParams, TEntity>(entityParams);
             var tracingFieldsModel = entity as TracingDateModel;
-            tracingFieldsModel?.FillTracingFields(ActionTypes.Create);
+            tracingFieldsModel?.FillTracingFields(ActionTypes.Create);            
             OnSaveChanging(entity, entityParams);
-
+            
             _repository.Create(entity);
             _repository.SaveChanges();
 
@@ -131,7 +131,7 @@ namespace Gift.Core.BaseServices
 
         }
 
-        public bool CheckUserProperty(IEntityParams entityParams)
+        public bool? CheckUserProperty(IEntityParams entityParams)
         {
             var idEntity = (IEntity)entityParams;
             var currentUserEntity = (IUserId)entityParams;
@@ -139,6 +139,9 @@ namespace Gift.Core.BaseServices
             var entity = _repository.Get(idEntity?.Id ?? 0);
 
             var userEntity = (IUserId) entity;
+
+            if (userEntity == null)
+                return null;
 
             if ( (currentUserEntity?.UserId ?? 0) != (userEntity?.UserId ?? 0))
             {

@@ -35,7 +35,7 @@ namespace Gift.Api.Controllers
             {
                 return ErrorResponse(new ErrorModel(null, Resources.WebApiResource.UnsupportedMediaType, 1), HttpStatusCode.UnsupportedMediaType);
             }
-            var virtualPath = "~/App_Data/Temp/FileUploads/Register";
+            var virtualPath = "~/Register";
             var rootPath = HttpContext.Current.Server.MapPath(virtualPath);
 
             Directory.CreateDirectory(rootPath);
@@ -73,7 +73,7 @@ namespace Gift.Api.Controllers
             if (eventParams.Id != 0)
             {
                 var isUsersOwnEvent = _eventService.CheckUserProperty(eventParams);
-                if (!isUsersOwnEvent)
+                if (isUsersOwnEvent != null && !isUsersOwnEvent.GetValueOrDefault())
                     return ErrorResponse(new ErrorModel(null, Resources.WebApiResource.CreatingWishlistFailed, 1));
             }
 
@@ -95,7 +95,8 @@ namespace Gift.Api.Controllers
         [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer), HttpPost]
         public IHttpActionResult GetEventById(EventIdModel eventModel)
         {
-            var eventDetail = new EventModel(_eventService.Get(eventModel.EventId));
+            var userId = User.Identity.GetUserId<int>();
+            var eventDetail = _eventService.GetEventById(eventModel.EventId, userId);
             return SuccessResponse(new SuccessModel(eventDetail, null, 0));
         }
 

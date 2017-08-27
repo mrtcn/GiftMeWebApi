@@ -36,6 +36,7 @@ namespace Gift.Data.Models
     {
         public ApplicationUser() : base() {
             UserEvents = new HashSet<UserEvent>();
+            FavoriteEvents = new HashSet<FavoriteEvent>();
         }
         public ApplicationUser(ApplicationUser user)
         {
@@ -47,6 +48,7 @@ namespace Gift.Data.Models
             Gender = user.Gender;
             Birthdate = user.Birthdate;
             UserEvents = new HashSet<UserEvent>();
+            FavoriteEvents = new HashSet<FavoriteEvent>();
         }
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -55,6 +57,7 @@ namespace Gift.Data.Models
         public DateTime Birthdate { get; set; }
         public virtual ICollection<Friend> Friends { get; set; }
         public virtual ICollection<UserEvent> UserEvents { get; set; }
+        public virtual ICollection<FavoriteEvent> FavoriteEvents { get; set; }
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser, int> manager, string defaultAuthenticationType)
         {
             var userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);

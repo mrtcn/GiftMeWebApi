@@ -39,6 +39,10 @@ namespace Gift.Data.Models {
                 .HasMany(x => x.Friends)
                 .WithOptional(x => x.Friendship)
                 .HasForeignKey(x => x.FriendId);
+            modelBuilder.Entity<ApplicationUser>()
+                .HasMany(x => x.FavoriteEvents)
+                .WithRequired(x => x.User)
+                .HasForeignKey(x => x.UserId);
             //modelBuilder.Entity<ApplicationRole>().Property(r => r.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
             //var entityTypes = Assembly.GetExecutingAssembly().GetTypes().Where(x => x.BaseType != null

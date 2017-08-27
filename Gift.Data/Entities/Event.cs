@@ -17,6 +17,7 @@ namespace Gift.Data.Entities {
         public Event()
         {
             UserEvents = new HashSet<UserEvent>();
+            FavoriteEvents = new HashSet<FavoriteEvent>();
         }
         public int Id { get; set; }
         public string EventName { get; set; }
@@ -33,6 +34,7 @@ namespace Gift.Data.Entities {
 
         public Status Status { get; set; }
         public virtual ApplicationUser User { get; set; }
+        public virtual ICollection<FavoriteEvent> FavoriteEvents { get; set; }
         public virtual ICollection<GiftItem> GiftItems { get; set; }
         public virtual ICollection<UserEvent> UserEvents { get; set; }
         public virtual ICollection<EventComment> EventComments { get; set; }

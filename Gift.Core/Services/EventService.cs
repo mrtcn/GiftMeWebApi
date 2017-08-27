@@ -14,6 +14,7 @@ namespace Gift.Core.Services
     public interface IEventService : IBaseService<Event>
     {
         List<EventListModel> EventList(EventListType eventListType, int userId);
+        EventListModel GetEventById(int id, int userId);
     }
 
     public class EventService : BaseService<Event>, IEventService
@@ -66,6 +67,29 @@ namespace Gift.Core.Services
                 }
         }
 
+        public EventListModel GetEventById(int id, int userId)
+        {
+            return Entities                
+                .Select(x => new EventListModel
+                {
+                    EventOwner = new AddedEventUser
+                    {
+                        UserId = x.User.Id,
+                        UserImagePath = CoreSettings.BaseUrl + x.User.ImagePath,
+                        UserName = x.User.FirstName + " " + x.User.LastName
+                    },
+                    EventDate = x.EventDate,
+                    EventName = x.EventName,
+                    EventBoughtItemAmount = x.GiftItems.Where(z => z.IsBought && z.Status == Status.Active).Count(),
+                    EventLeftItemAmount = x.GiftItems.Where(z => !z.IsBought && z.Status == Status.Active).Count(),
+                    EventItemAmount = x.GiftItems.Where(z => z.Status == Status.Active).Count(),
+                    EventImagePath = CoreSettings.BaseUrl + x.EventImagePath,
+                    EventTypeId = x.EventTypeId,
+                    IsFavoriteEvent = x.FavoriteEvents.Any(z => z.EventId == id && z.UserId == userId && z.Status == Status.Active),
+                    Id = x.Id
+                }).FirstOrDefault(x => x.Id == id);
+        }
+
         public List<EventListModel> EventList(EventListType eventListType, int userId)
         {
             switch (eventListType)
@@ -89,7 +113,7 @@ namespace Gift.Core.Services
                     EventOwner = new AddedEventUser
                     {
                         UserId = x.User.Id,
-                        UserImagePath = "http://192.168.0.16:54635" + x.User.ImagePath,
+                        UserImagePath = CoreSettings.BaseUrl  + x.User.ImagePath,
                         UserName = x.User.FirstName + " " + x.User.LastName
                     },
                     EventDate = x.EventDate,
@@ -97,7 +121,7 @@ namespace Gift.Core.Services
                     EventBoughtItemAmount = x.GiftItems.Where(z => z.IsBought && z.Status == Status.Active).Count(),
                     EventLeftItemAmount = x.GiftItems.Where(z => !z.IsBought && z.Status == Status.Active).Count(),
                     EventItemAmount = x.GiftItems.Where(z => z.Status == Status.Active).Count(),
-                    EventImagePath = "http://192.168.0.16:54635" + x.EventImagePath,
+                    EventImagePath = CoreSettings.BaseUrl  + x.EventImagePath,
                     EventTypeId = x.EventTypeId,
                     Id = x.Id
                 }).ToList();
@@ -112,7 +136,7 @@ namespace Gift.Core.Services
                     EventOwner = new AddedEventUser
                     {
                         UserId = x.User.Id,
-                        UserImagePath = "http://192.168.0.16:54635" + x.User.ImagePath,
+                        UserImagePath = CoreSettings.BaseUrl  + x.User.ImagePath,
                         UserName = x.User.FirstName + " " + x.User.LastName
                     },
                     EventDate = x.EventDate,
@@ -120,7 +144,7 @@ namespace Gift.Core.Services
                     EventBoughtItemAmount = x.GiftItems.Where(z => z.IsBought && z.Status == Status.Active).Count(),
                     EventLeftItemAmount = x.GiftItems.Where(z => !z.IsBought && z.Status == Status.Active).Count(),
                     EventItemAmount = x.GiftItems.Where(z => z.Status == Status.Active).Count(),
-                    EventImagePath = "http://192.168.0.16:54635" + x.EventImagePath,                   
+                    EventImagePath = CoreSettings.BaseUrl  + x.EventImagePath,                   
                     EventTypeId = x.EventTypeId,                    
                     Id = x.Id
                 }).OrderByDescending(x => x.EventDate).ToList();
@@ -137,7 +161,7 @@ namespace Gift.Core.Services
                     EventOwner = new AddedEventUser
                     {
                         UserId = x.User.Id,
-                        UserImagePath = "http://192.168.0.16:54635" + x.User.ImagePath,
+                        UserImagePath = CoreSettings.BaseUrl  + x.User.ImagePath,
                         UserName = x.User.FirstName + " " + x.User.LastName
                     },
                     EventDate = x.EventDate,
@@ -145,7 +169,7 @@ namespace Gift.Core.Services
                     EventBoughtItemAmount = x.GiftItems.Where(z => z.IsBought && z.Status == Status.Active).Count(),
                     EventLeftItemAmount = x.GiftItems.Where(z => !z.IsBought && z.Status == Status.Active).Count(),
                     EventItemAmount = x.GiftItems.Where(z => z.Status == Status.Active).Count(),
-                    EventImagePath = "http://192.168.0.16:54635" + x.EventImagePath,                 
+                    EventImagePath = CoreSettings.BaseUrl  + x.EventImagePath,                 
                     EventTypeId = x.EventTypeId,                    
                     Id = x.Id
                 }).OrderByDescending(x => x.EventDate).ToList();
