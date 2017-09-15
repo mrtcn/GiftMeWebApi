@@ -10,7 +10,7 @@ namespace Gift.Core.Services
     public interface IGiftItemService : IBaseService<GiftItem>
     {
         List<GiftItemModel> GiftItemListByEventId(int eventId, int userId);
-        int GetGiftStatus(bool isBought, int giftOwnerId, int eventOwnerId, List<int> eventAttendeeIds, int userId);
+        int GetGiftItemStatus(bool isBought, int giftOwnerId, int eventOwnerId, List<int> eventAttendeeIds, int userId);
     }
 
     public class GiftItemService : BaseService<GiftItem>, IGiftItemService {
@@ -31,18 +31,18 @@ namespace Gift.Core.Services
                     EventOwnerId = x.Event.UserId,
                     EventAttendeeIds = x.Event.UserEvents.Where(z => z.Status == Data.Models.Status.Active).Select(z => z.UserId).ToList(),
                     UserId = x.UserId,
-                    GiftImagePath = CoreSettings.BaseUrl + x.GiftImagePath,
+                    GiftItemImagePath = CoreSettings.BaseUrl + x.GiftItemImagePath,
                     Brand = x.Brand,
                     Amount = x.Amount,
                     Description = x.Description,
-                    IsBought = x.IsBought,                    
+                    IsBought = x.IsBought,
                     GiftItemName = x.GiftItemName
                 }).Where(x => x.EventId == eventId).ToList();
-            gift.ForEach(x => x.GiftStatus = GetGiftStatus(x.IsBought, x.UserId, x.EventOwnerId, x.EventAttendeeIds, userId));
+            gift.ForEach(x => x.GiftItemStatus = GetGiftItemStatus(x.IsBought, x.UserId, x.EventOwnerId, x.EventAttendeeIds, userId));
             return gift;
         }
 
-        public int GetGiftStatus(bool isBought, int giftOwnerId, int eventOwnerId, List<int> eventAttendeeIds, int userId)
+        public int GetGiftItemStatus(bool isBought, int giftOwnerId, int eventOwnerId, List<int> eventAttendeeIds, int userId)
         {
             if (!isBought && eventAttendeeIds.Contains(userId) )
             {

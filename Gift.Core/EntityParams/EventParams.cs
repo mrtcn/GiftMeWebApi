@@ -122,7 +122,7 @@ namespace Gift.Core.EntityParams {
         {
             Id = model.Id;
             GiftItemName = model.GiftItemName;
-            GiftImagePath = model.GiftImagePath;
+            GiftItemImagePath = model.GiftItemImagePath;
             Brand = model.Brand;
             Description = model.Description;
             Amount = model.Amount;
@@ -135,7 +135,7 @@ namespace Gift.Core.EntityParams {
         
         public int Id { get; set; }
         public string GiftItemName { get; set; }
-        public string GiftImagePath { get; set; }
+        public string GiftItemImagePath { get; set; }
         public string Brand { get; set; }
         public string Description { get; set; }
         public int Amount { get; set; }
@@ -144,6 +144,6 @@ namespace Gift.Core.EntityParams {
         public List<int> EventAttendeeIds { get; set; }
         public int UserId { get; set; }
         public bool IsBought { get; set; }
-        public int GiftStatus { get; set; }
+        public int GiftItemStatus { get; set; }
     }
 }

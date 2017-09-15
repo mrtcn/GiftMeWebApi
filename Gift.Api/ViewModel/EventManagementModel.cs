@@ -22,6 +22,7 @@ namespace Gift.Api.ViewModel
     public class EventListTypeModel
     {
         public EventListType EventListType { get; set; }
+        public string SearchTerm { get; set; }
     }
 
     public class EventIdModel

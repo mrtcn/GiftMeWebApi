@@ -24,7 +24,7 @@ namespace Gift.Core.Services.IdentityServices
             manager.UserValidator = new UserValidator<ApplicationUser, int>(manager)
             {
                 AllowOnlyAlphanumericUserNames = false,
-                RequireUniqueEmail = false,
+                RequireUniqueEmail = true
             };
             // Configure validation logic for passwords 
             manager.PasswordValidator = new PasswordValidator
@@ -33,7 +33,7 @@ namespace Gift.Core.Services.IdentityServices
                 RequireNonLetterOrDigit = false,
                 RequireDigit = false,
                 RequireLowercase = false,
-                RequireUppercase = false,
+                RequireUppercase = false                
             };
             // Register two factor authentication providers. This application uses Phone 
             // and Emails as a step of receiving a code for verifying the user 

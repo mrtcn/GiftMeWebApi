@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
@@ -27,15 +26,32 @@ namespace Gift.Api.Controllers
             _giftItemService = giftItemService;
         }
 
-        [Route("CreateOrUpdateGiftItem")]
+        [Route("CreateOrUpdateWithoutImage")]
         [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer), HttpPost]
-        public async Task<IHttpActionResult> CreateOrUpdateGiftItem()
+        public async Task<IHttpActionResult> CreateOrUpdateWithoutImage(GiftItemViewModel model)
         {
-            if (!Request.Content.IsMimeMultipartContent())
-            {
-                return ErrorResponse(new ErrorModel(null, Resources.WebApiResource.UnsupportedMediaType, 1), HttpStatusCode.UnsupportedMediaType);
-            }
-            var virtualPath = "~/Register";
+            var giftItemParams = new GiftItemParams();
+            Mapper.Map(model, giftItemParams);
+
+            /* Get and Assign UserId */
+            giftItemParams.UserId = User.Identity.GetUserId<int>();
+
+            //Check If User is updating his/her own comment
+            var isUsersOwnEvent = _giftItemService.CheckUserProperty(giftItemParams);
+
+            if (isUsersOwnEvent != null && !isUsersOwnEvent.GetValueOrDefault())
+                return ErrorResponse(new ErrorModel(null, Resources.WebApiResource.SavingCommentFailed, 1));
+
+            var giftItemEntity = _giftItemService.CreateOrUpdate(giftItemParams);
+
+            return SuccessResponse(new SuccessModel(giftItemEntity.EventId, null, 0));
+        }
+
+        [Route("CreateOrUpdate")]
+        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer), HttpPost]
+        public async Task<IHttpActionResult> CreateOrUpdate()
+        {
+            var virtualPath = "~/img/GiftItem/";
             var rootPath = HttpContext.Current.Server.MapPath(virtualPath);
 
             Directory.CreateDirectory(rootPath);
@@ -43,7 +59,7 @@ namespace Gift.Api.Controllers
             var data = await Request.Content.ReadAsMultipartAsync(provider);
             if (data.FormData["data"] == null)
             {
-                return ErrorResponse(new ErrorModel(null, Resources.WebApiResource.CreatingItemFailed, 1));
+                return ErrorResponse(new ErrorModel(null, Resources.WebApiResource.RegisterFailed, 1));
             }
 
             var modelJson = data.FormData["data"];
@@ -61,28 +77,26 @@ namespace Gift.Api.Controllers
 
             if (!ModelState.IsValid)
             {
-                return ErrorResponse(new ErrorModel(null, Resources.WebApiResource.CreatingItemFailed, 1));
+                return ErrorResponse(new ErrorModel(null, Resources.WebApiResource.RegisterFailed, 1));
             }
-            var giftItemParams = new GiftItemParams();            
+
+            var giftItemParams = new GiftItemParams();
             Mapper.Map(model, giftItemParams);
-            giftItemParams.GiftImagePath = fileFullPath?.AbsolutePath;
+            giftItemParams.GiftItemImagePath = fileFullPath?.AbsolutePath;
+
             /* Get and Assign UserId */
             giftItemParams.UserId = User.Identity.GetUserId<int>();
-            //If it is update, check if it is user's own giftItem or not
+            //If it is update, check if it is user's own event or not
             if (giftItemParams.Id != 0)
             {
-                var isUsersOwnGiftItem = _giftItemService.CheckUserProperty(giftItemParams);
-                if (isUsersOwnGiftItem != null && !isUsersOwnGiftItem.GetValueOrDefault())
-                    return ErrorResponse(new ErrorModel(null, Resources.WebApiResource.CreatingItemFailed, 1));
+                var isUsersOwnEvent = _giftItemService.CheckUserProperty(giftItemParams);
+                if (isUsersOwnEvent != null && !isUsersOwnEvent.GetValueOrDefault())
+                    return ErrorResponse(new ErrorModel(null, Resources.WebApiResource.CreatingWishlistFailed, 1));
             }
-            //CreatedBy and UpdatedBy 
-            if (giftItemParams.Id > 0)
-            {
-                
-            }
+
             _giftItemService.CreateOrUpdate(giftItemParams);
-                             
-             return SuccessResponse(new SuccessModel(giftItemParams.Id));
+
+            return SuccessResponse(new SuccessModel(giftItemParams.EventId, null, 0));
         }
 
         [Route("ToggleGiftItemBuyStatus")]
@@ -120,9 +134,9 @@ namespace Gift.Api.Controllers
             return SuccessResponse(new SuccessModel(giftItemDetail));
         }
 
-        [Route("RemoveGiftItem")]
+        [Route("Remove")]
         [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer), HttpPost]
-        public IHttpActionResult RemoveGiftItem(int giftItemId)
+        public IHttpActionResult Remove(int giftItemId)
         {            
             return SuccessResponse(new SuccessModel(_giftItemService.Remove(giftItemId)));
         }

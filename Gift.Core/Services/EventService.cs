@@ -13,7 +13,7 @@ namespace Gift.Core.Services
 {
     public interface IEventService : IBaseService<Event>
     {
-        List<EventListModel> EventList(EventListType eventListType, int userId);
+        List<EventListModel> EventList(EventListType eventListType, int userId, string searchTerm = null);
         EventListModel GetEventById(int id, int userId);
     }
 
@@ -90,24 +90,24 @@ namespace Gift.Core.Services
                 }).FirstOrDefault(x => x.Id == id);
         }
 
-        public List<EventListModel> EventList(EventListType eventListType, int userId)
+        public List<EventListModel> EventList(EventListType eventListType, int userId, string searchTerm = null)
         {
             switch (eventListType)
             {
                 case EventListType.OwnEvents:
-                    return UserEventList(userId);
+                    return UserEventList(userId, searchTerm);
                 case EventListType.PublicEvents:
-                    return PublicEventList();
+                    return PublicEventList(searchTerm);
                 case EventListType.FriendsEvents:
-                    return FriendsEventList(userId);
+                    return FriendsEventList(userId, searchTerm);
                 default:
                     return null;
             }
         }
 
-        private List<EventListModel> UserEventList(int userId)
+        private List<EventListModel> UserEventList(int userId, string searchTerm = null)
         {
-            return Entities.Where(x => x.UserId == userId && x.Status == Status.Active)
+            return Entities.Where(x => x.UserId == userId && x.Status == Status.Active && (searchTerm == null || x.EventName.Contains(searchTerm)))
                 .Select(x => new EventListModel
                 {
                     EventOwner = new AddedEventUser
@@ -127,10 +127,10 @@ namespace Gift.Core.Services
                 }).ToList();
         }
 
-        private List<EventListModel> PublicEventList()
+        private List<EventListModel> PublicEventList(string searchTerm = null)
         {
             return Entities.Take(100)
-                .Where(x => x.Permission == PermissionStatus.Everyone && x.Status == Status.Active)
+                .Where(x => x.Permission == PermissionStatus.Everyone && x.Status == Status.Active && (searchTerm == null || x.EventName.Contains(searchTerm)))
                 .Select(x => new EventListModel
                 {
                     EventOwner = new AddedEventUser
@@ -150,12 +150,12 @@ namespace Gift.Core.Services
                 }).OrderByDescending(x => x.EventDate).ToList();
         }
 
-        private List<EventListModel> FriendsEventList(int userId)
+        private List<EventListModel> FriendsEventList(int userId, string searchTerm = null)
         {
             var friendIds = _friendService.GetUserFriendIds(userId);
 
             return Entities.Take(100)
-                .Where(x => x.Status == Status.Active && friendIds.Contains(x.UserId))
+                .Where(x => x.Status == Status.Active && friendIds.Contains(x.UserId) && (searchTerm == null || x.EventName.Contains(searchTerm)))
                 .Select(x => new EventListModel
                 {
                     EventOwner = new AddedEventUser

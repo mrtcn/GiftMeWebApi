@@ -27,15 +27,11 @@ namespace Gift.Api.Controllers
             _eventService = eventService;
         }
 
-        [Route("CreateOrUpdateEvent")]
-        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer), HttpPost]
-        public async Task<IHttpActionResult> CreateOrUpdateEvent()
+        [Route("CreateOrUpdate")]
+        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+        public async Task<IHttpActionResult> CreateOrUpdate()
         {
-            if (!Request.Content.IsMimeMultipartContent())
-            {
-                return ErrorResponse(new ErrorModel(null, Resources.WebApiResource.UnsupportedMediaType, 1), HttpStatusCode.UnsupportedMediaType);
-            }
-            var virtualPath = "~/Register";
+            var virtualPath = "~/img/Events/";
             var rootPath = HttpContext.Current.Server.MapPath(virtualPath);
 
             Directory.CreateDirectory(rootPath);
@@ -43,7 +39,7 @@ namespace Gift.Api.Controllers
             var data = await Request.Content.ReadAsMultipartAsync(provider);
             if (data.FormData["data"] == null)
             {
-                return ErrorResponse(new ErrorModel(null, Resources.WebApiResource.CreatingWishlistFailed, 1));
+                return ErrorResponse(new ErrorModel(null, Resources.WebApiResource.RegisterFailed, 1));
             }
 
             var modelJson = data.FormData["data"];
@@ -61,8 +57,9 @@ namespace Gift.Api.Controllers
 
             if (!ModelState.IsValid)
             {
-                return ErrorResponse(new ErrorModel(null, Resources.WebApiResource.CreatingWishlistFailed, 1));
+                return ErrorResponse(new ErrorModel(null, Resources.WebApiResource.RegisterFailed, 1));
             }
+
             var eventParams = new EventParams();            
             Mapper.Map(model, eventParams);
             eventParams.EventImagePath = fileFullPath?.AbsolutePath;
@@ -82,12 +79,33 @@ namespace Gift.Api.Controllers
             return SuccessResponse(new SuccessModel(eventParams.Id, null, 0));
         }
 
+        [Route("CreateOrUpdateWithoutImage")]
+        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer), HttpPost]
+        public IHttpActionResult CreateOrUpdateWithoutImage(EventViewModel model)
+        {
+            var eventParams = new EventParams();
+            Mapper.Map(model, eventParams);
+
+            /* Get and Assign UserId */
+            eventParams.UserId = User.Identity.GetUserId<int>();
+
+            //Check If User is updating his/her own comment
+            var isUsersOwnEvent = _eventService.CheckUserProperty(eventParams);
+
+            if (isUsersOwnEvent != null && !isUsersOwnEvent.GetValueOrDefault())
+                return ErrorResponse(new ErrorModel(null, Resources.WebApiResource.SavingCommentFailed, 1));
+
+            var eventEntity = _eventService.CreateOrUpdate(eventParams);
+
+            return SuccessResponse(new SuccessModel(eventEntity.Id, null, 0));
+        }
+
         [Route("EventList")]
         [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer), HttpPost]
         public IHttpActionResult EventList(EventListTypeModel model)
         {
             var userId = User.Identity.GetUserId<int>();
-            var eventList = _eventService.EventList(model.EventListType, userId);
+            var eventList = _eventService.EventList(model.EventListType, userId, model.SearchTerm);
             return SuccessResponse(new SuccessModel(eventList, null, 0));
         }
 

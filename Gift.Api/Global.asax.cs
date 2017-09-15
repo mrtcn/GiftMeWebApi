@@ -20,6 +20,16 @@ namespace Gift.Api
 
     public static class ApiStarter
     {
+#if DEBUG
+        public static string BaseUrl
+        {
+            get { return WebConfigurationManager.AppSettings["DebugWebBaseUrl"]; }
+        }
+        public static string DashboardBaseUrl
+        {
+            get { return WebConfigurationManager.AppSettings["DebugDashboardBaseUrl"]; }
+        }
+#else
         public static string BaseUrl
         {
             get { return WebConfigurationManager.AppSettings["WebBaseUrl"]; }
@@ -28,5 +38,6 @@ namespace Gift.Api
         {
             get { return WebConfigurationManager.AppSettings["DashboardBaseUrl"]; }
         }
+#endif
     }
 }
