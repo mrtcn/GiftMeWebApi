@@ -171,6 +171,10 @@
     <Compile Include="Migrations\201709101355175_GiftItemImagePath.Designer.cs">
       <DependentUpon>201709101355175_GiftItemImagePath.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201709171245385_AddThumbnailProperties.cs" />
+    <Compile Include="Migrations\201709171245385_AddThumbnailProperties.Designer.cs">
+      <DependentUpon>201709171245385_AddThumbnailProperties.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ActionTypes.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
@@ -229,6 +233,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201709101355175_GiftItemImagePath.resx">
       <DependentUpon>201709101355175_GiftItemImagePath.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201709171245385_AddThumbnailProperties.resx">
+      <DependentUpon>201709171245385_AddThumbnailProperties.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

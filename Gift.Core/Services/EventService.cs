@@ -76,6 +76,7 @@ namespace Gift.Core.Services
                     {
                         UserId = x.User.Id,
                         UserImagePath = CoreSettings.BaseUrl + x.User.ImagePath,
+                        UserThumbnailPath = CoreSettings.BaseUrl + x.User.ThumbnailPath,
                         UserName = x.User.FirstName + " " + x.User.LastName
                     },
                     EventDate = x.EventDate,
@@ -114,6 +115,7 @@ namespace Gift.Core.Services
                     {
                         UserId = x.User.Id,
                         UserImagePath = CoreSettings.BaseUrl  + x.User.ImagePath,
+                        UserThumbnailPath = CoreSettings.BaseUrl + x.User.ThumbnailPath,
                         UserName = x.User.FirstName + " " + x.User.LastName
                     },
                     EventDate = x.EventDate,
@@ -137,6 +139,7 @@ namespace Gift.Core.Services
                     {
                         UserId = x.User.Id,
                         UserImagePath = CoreSettings.BaseUrl  + x.User.ImagePath,
+                        UserThumbnailPath = CoreSettings.BaseUrl + x.User.ThumbnailPath,
                         UserName = x.User.FirstName + " " + x.User.LastName
                     },
                     EventDate = x.EventDate,
@@ -162,6 +165,7 @@ namespace Gift.Core.Services
                     {
                         UserId = x.User.Id,
                         UserImagePath = CoreSettings.BaseUrl  + x.User.ImagePath,
+                        UserThumbnailPath = CoreSettings.BaseUrl + x.User.ThumbnailPath,
                         UserName = x.User.FirstName + " " + x.User.LastName
                     },
                     EventDate = x.EventDate,

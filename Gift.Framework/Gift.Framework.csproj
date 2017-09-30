@@ -40,6 +40,10 @@
     <Reference Include="EntityFramework.SqlServer">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="ImageResizer, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ImageResizer.4.1.10\lib\net45\ImageResizer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Kendo.Mvc">
       <HintPath>..\..\MovieCrawler\packages\Kendo.Mvc\Kendo.Mvc.dll</HintPath>
     </Reference>
@@ -114,15 +118,14 @@
     <Compile Include="Repository\Repository.cs" />
     <Compile Include="Repository\UnitOfWork.cs" />
     <Compile Include="Utilities\Extensions\AnonymousObjectExtensions.cs" />
+    <Compile Include="Utilities\Helpers\ImageHelper.cs" />
     <Compile Include="Utilities\NotificationManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Utilities\Helpers\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\Gift.Data\Gift.Data.csproj">
       <Project>{ccc883e0-0439-4fac-a056-c47c06e8cc70}</Project>

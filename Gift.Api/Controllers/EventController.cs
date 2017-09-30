@@ -1,18 +1,13 @@
 ﻿using System;
 using System.IO;
-using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Http;
 using Gift.Api.ViewModel;
 using Gift.Core.Services;
 using Microsoft.AspNet.Identity;
 using AutoMapper;
 using Gift.Api.Models;
-using Gift.Api.Utilities.Helpers;
 using Gift.Core.EntityParams;
-using Newtonsoft.Json;
 
 namespace Gift.Api.Controllers
 {
@@ -32,28 +27,18 @@ namespace Gift.Api.Controllers
         public async Task<IHttpActionResult> CreateOrUpdate()
         {
             var virtualPath = "~/img/Events/";
-            var rootPath = HttpContext.Current.Server.MapPath(virtualPath);
 
-            Directory.CreateDirectory(rootPath);
-            var provider = new MultipartFormDataStreamProvider(rootPath);
-            var data = await Request.Content.ReadAsMultipartAsync(provider);
-            if (data.FormData["data"] == null)
-            {
-                return ErrorResponse(new ErrorModel(null, Resources.WebApiResource.RegisterFailed, 1));
-            }
+            // Get Multipart Form Data
+            var data = await GetMultipartFormData(virtualPath);
 
-            var modelJson = data.FormData["data"];
-            var model = JsonConvert.DeserializeObject<EventViewModel>(modelJson);
+            // Deserialize model out of Multipart Form Data
+            var model = DeserializeMultipartFormData<EventViewModel>(data);
 
-            Uri fileFullPath = null;
-            var replacedAbsoluteUri = Request.RequestUri.AbsoluteUri.Replace(Request.RequestUri.PathAndQuery, string.Empty);
+            // Save image into physical path via virtual path and returns physical file path
+            var virtualFilePath = SaveMultipartFormData(data, virtualPath, 400, 400);
 
-            //get the files and save to the specified path
-            foreach (var item in data.FileData)
-            {
-                var imageHelper = new ImageHelper(item, virtualPath, replacedAbsoluteUri);
-                fileFullPath = imageHelper.SaveImage();
-            }
+            var virtualThumbnailFolderPath = "~/img/Events/Thumbnail/";
+            var thumbnailFilePath = CreateThumbnail(virtualFilePath, virtualThumbnailFolderPath, 200, 200);
 
             if (!ModelState.IsValid)
             {
@@ -62,7 +47,8 @@ namespace Gift.Api.Controllers
 
             var eventParams = new EventParams();            
             Mapper.Map(model, eventParams);
-            eventParams.EventImagePath = fileFullPath?.AbsolutePath;
+            eventParams.EventImagePath = virtualFilePath;
+            eventParams.EventThumbnailPath = thumbnailFilePath;
 
             /* Get and Assign UserId */
             eventParams.UserId = User.Identity.GetUserId<int>();

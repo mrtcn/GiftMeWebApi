@@ -247,6 +247,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Utilities\Extensions\" />
+    <Folder Include="Utilities\Helpers\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_GlobalResources\WebApiResource.Designer.cs">
@@ -322,7 +323,6 @@
     <Compile Include="Results\ErrorHttpActionResult.cs" />
     <Compile Include="Results\SuccessHttpActionResult.cs" />
     <Compile Include="Startup.cs" />
-    <Compile Include="Utilities\Helpers\ImageHelper.cs" />
     <Compile Include="ViewModel\AccountBindingModels.cs" />
     <Compile Include="ViewModel\AccountViewModel.cs" />
     <Compile Include="ViewModel\FavoriteEventViewModel.cs" />

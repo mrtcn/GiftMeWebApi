@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -12,11 +11,11 @@ using System.Web.Http;
 using System.Web.Mvc;
 using Gift.Api.Models;
 using Gift.Api.Results;
-using Gift.Api.Utilities.Helpers;
 using Gift.Api.ViewModel;
 using Gift.Core.Services;
 using Gift.Core.Services.IdentityServices;
 using Gift.Data.Models;
+using Gift.Framework.Utilities.Helpers;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
@@ -384,33 +383,20 @@ namespace Gift.Api.Controllers.Account
         [System.Web.Http.Route("Register")]
         public async Task<IHttpActionResult> Register()
         {
-            //if (!Request.Content.IsMimeMultipartContent())
-            //{
-            //    return ErrorResponse(new ErrorModel(null, Resources.WebApiResource.UnsupportedMediaType, 1), HttpStatusCode.UnsupportedMediaType);
-            //}
-            var virtualPath = "~/img/Register/";
-            var rootPath = HttpContext.Current.Server.MapPath(virtualPath);
-
-            Directory.CreateDirectory(rootPath);
-            var provider = new MultipartFormDataStreamProvider(rootPath);
-            var data = await Request.Content.ReadAsMultipartAsync(provider);
-            if (data.FormData["data"] == null)
-            {
-                return ErrorResponse(new ErrorModel(null, Resources.WebApiResource.RegisterFailed, 1));
-            }
-
-            var modelJson = data.FormData["data"];
-            var model = JsonConvert.DeserializeObject<RegisterViewModel>(modelJson);
-
-            Uri fileFullPath = null;
-            var replacedAbsoluteUri = Request.RequestUri.AbsoluteUri.Replace(Request.RequestUri.PathAndQuery, string.Empty);
             
-            //get the files and save to the specified path
-            foreach (var item in data.FileData)
-            {
-                var imageHelper = new ImageHelper(item, virtualPath, replacedAbsoluteUri);
-                fileFullPath = imageHelper.SaveImage();
-            }
+            var virtualPath = "~/img/Register/";
+
+            // Get Multipart Form Data
+            var data = await GetMultipartFormData(virtualPath);
+
+            // Deserialize model out of Multipart Form Data
+            var model = DeserializeMultipartFormData<RegisterViewModel>(data);
+
+            // Save image into physical path via virtual path and returns physical file path
+            var virtualFilePath = SaveMultipartFormData(data, virtualPath, 400, 400);
+
+            var virtualThumbnailFolderPath = "~/img/Register/Thumbnail/";
+            var thumbnailFilePath = CreateThumbnail(virtualFilePath, virtualThumbnailFolderPath, 200, 200);
 
             if (!ModelState.IsValid)
             {
@@ -423,7 +409,8 @@ namespace Gift.Api.Controllers.Account
                 Email = model.Email,
                 Gender = model.Gender,
                 Birthdate = model.Birthdate,
-                ImagePath = fileFullPath?.AbsolutePath,
+                ImagePath = virtualFilePath,
+                ThumbnailPath = thumbnailFilePath,
                 FirstName = string.Empty,
                 LastName = string.Empty
             };

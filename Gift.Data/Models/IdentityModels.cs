@@ -45,6 +45,8 @@ namespace Gift.Data.Models
             Email = user.Email;
             PhoneNumber = user.PhoneNumber;
             UserName = user.UserName;
+            ImagePath = user.ImagePath;
+            ThumbnailPath = user.ThumbnailPath;
             Gender = user.Gender;
             Birthdate = user.Birthdate;
             UserEvents = new HashSet<UserEvent>();
@@ -53,6 +55,7 @@ namespace Gift.Data.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string ImagePath { get; set; }
+        public string ThumbnailPath { get; set; }
         public GenderType Gender { get; set; }
         public DateTime Birthdate { get; set; }
         public virtual ICollection<Friend> Friends { get; set; }

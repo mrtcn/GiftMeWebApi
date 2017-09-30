@@ -7,6 +7,7 @@ namespace Gift.Data.Entities {
     public interface IEvent : IEntity, IUserId, IHasStatus, ITracingFieldsModel {
         string EventName { get; set; }
         string EventImagePath { get; set; }
+        string EventThumbnailPath { get; set; }
         int EventTypeId { get; set; }
         DateTime? EventDate { get; set; }
         PermissionStatus Permission { get; set; }
@@ -22,6 +23,7 @@ namespace Gift.Data.Entities {
         public int Id { get; set; }
         public string EventName { get; set; }
         public string EventImagePath { get; set; }
+        public string EventThumbnailPath { get; set; }
         public int EventTypeId { get; set; }
         public int UserId { get; set; }
         public DateTime? EventDate { get; set; }

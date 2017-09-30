@@ -9,6 +9,7 @@ namespace Gift.Core.EntityParams {
     public class EventParams : IEntityParams, IUserId {
         public int Id { get; set; }
         public string EventImagePath { get; set; }
+        public string EventThumbnailPath { get; set; }
         public string EventName { get; set; }
         public int EventTypeId { get; set; }
         public int UserId { get; set; }
@@ -39,6 +40,7 @@ namespace Gift.Core.EntityParams {
             EventDate = model.EventDate;
             EventName = model.EventName;
             EventImagePath = model.EventImagePath;
+            EventThumbnailPath = model.EventThumbnailPath;
             UserId = model.UserId;
             EventTypeId = model.EventTypeId;
             Permission = model.Permission;            
@@ -50,12 +52,14 @@ namespace Gift.Core.EntityParams {
                         new AddedEventUser()
                         {
                             UserId = x.UserId,
-                            UserImagePath = x.User.ImagePath
+                            UserImagePath = x.User.ImagePath,
+                            UserThumbnailPath = x.User.ThumbnailPath
                         }).FirstOrDefault(x => x.UserId == model.UserId);
         }
         public int Id { get; set; }
         public string EventName { get; set; }
         public string EventImagePath { get; set; }
+        public string EventThumbnailPath { get; set; }
         public bool IsFavoriteEvent { get; set; }
         public int EventTypeId { get; set; }
         public int UserId { get; set; }
@@ -78,6 +82,7 @@ namespace Gift.Core.EntityParams {
             EventDate = model.EventDate;
             EventName = model.EventName;
             EventImagePath = model.EventImagePath;
+            EventThumbnailPath = model.EventThumbnailPath;
             EventTypeId = model.EventTypeId;
             EventBoughtItemAmount = model.GiftItems.Where(x => x.IsBought && x.Status == Status.Active).Count();
             EventLeftItemAmount = model.GiftItems.Where(x => !x.IsBought && x.Status == Status.Active).Count();
@@ -89,12 +94,14 @@ namespace Gift.Core.EntityParams {
                        new AddedEventUser()
                        {
                            UserId = x.UserId,
-                           UserImagePath = x.User.ImagePath
+                           UserImagePath = x.User.ImagePath,
+                           UserThumbnailPath = x.User.ThumbnailPath
                        }).FirstOrDefault(x => x.UserId == model.UserId);
         }
         public int Id { get; set; }
         public string EventName { get; set; }
         public string EventImagePath { get; set; }
+        public string EventThumbnailPath { get; set; }
         public int EventTypeId { get; set; }
         public int EventBoughtItemAmount { get; set; }
         public int EventLeftItemAmount { get; set; }
@@ -108,6 +115,7 @@ namespace Gift.Core.EntityParams {
     {
         public int UserId { get; set; }
         public string UserImagePath { get; set; }
+        public string UserThumbnailPath { get; set; }
         public string UserName { get; set; }
     }
 
@@ -123,6 +131,7 @@ namespace Gift.Core.EntityParams {
             Id = model.Id;
             GiftItemName = model.GiftItemName;
             GiftItemImagePath = model.GiftItemImagePath;
+            GiftItemThumbnailPath = model.GiftItemThumbnailPath;
             Brand = model.Brand;
             Description = model.Description;
             Amount = model.Amount;
@@ -136,6 +145,7 @@ namespace Gift.Core.EntityParams {
         public int Id { get; set; }
         public string GiftItemName { get; set; }
         public string GiftItemImagePath { get; set; }
+        public string GiftItemThumbnailPath { get; set; }
         public string Brand { get; set; }
         public string Description { get; set; }
         public int Amount { get; set; }
