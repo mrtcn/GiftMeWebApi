@@ -57,7 +57,7 @@ namespace Gift.Api.Controllers
             var data = await GetMultipartFormData(virtualPath);
 
             // Deserialize model out of Multipart Form Data
-            var model = DeserializeMultipartFormData<EventViewModel>(data);
+            var model = DeserializeMultipartFormData<GiftItemViewModel>(data);
 
             // Save image into physical path via virtual path and returns physical file path
             var virtualFilePath = SaveMultipartFormData(data, virtualPath, 400, 400);

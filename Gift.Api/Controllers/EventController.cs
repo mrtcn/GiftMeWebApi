@@ -90,6 +90,7 @@ namespace Gift.Api.Controllers
         [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer), HttpPost]
         public IHttpActionResult EventList(EventListTypeModel model)
         {
+            throw new Exception();
             var userId = User.Identity.GetUserId<int>();
             var eventList = _eventService.EventList(model.EventListType, userId, model.SearchTerm);
             return SuccessResponse(new SuccessModel(eventList, null, 0));
